@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 const publicRoutes = ["/login", "/register"];
 
 const roleRoutes: Record<string, string[]> = {
-  "/dashboard/admin": ["ADMIN"],
+  "/studio": ["ADMIN"],
   "/dashboard/admin": ["ADMIN"],
   "/dashboard/landlord": ["LANDLORD", "ADMIN"],
   "/dashboard/tenant": ["TENANT", "LANDLORD", "ADMIN"],
