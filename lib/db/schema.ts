@@ -1,4 +1,7 @@
-import { pgTable, uuid, varchar, text, decimal, date, timestamp, pgEnum } from "drizzle-orm/pg-core";
+import {
+  pgTable, uuid, varchar, text, decimal,
+  date, timestamp, pgEnum, boolean
+} from "drizzle-orm/pg-core";
 
 // ─── Enums ────────────────────────────────────────────────────────────────────
 export const userRoleEnum = pgEnum("user_role", ["TENANT", "LANDLORD", "ADMIN"]);
@@ -8,6 +11,15 @@ export const invoiceTypeEnum = pgEnum("invoice_type", ["RENT", "UTILITY", "OTHER
 export const invoiceStatusEnum = pgEnum("invoice_status", ["UNPAID", "PARTIALLY_PAID", "PAID", "OVERDUE"]);
 export const paymentMethodEnum = pgEnum("payment_method", ["CASH", "BANK_TRANSFER", "MPESA", "OTHER"]);
 export const expenseCategoryEnum = pgEnum("expense_category", ["MAINTENANCE", "UTILITIES", "INSURANCE", "OTHER"]);
+
+// ─── Phase 2 Enums (commented out until Phase 2) ─────────────────────────────
+export const accountTypeEnum = pgEnum("account_type", ["ASSET", "LIABILITY", "EQUITY", "REVENUE", "EXPENSE"]);
+
+// ─── Roles ────────────────────────────────────────────────────────────────────
+export const roles = pgTable("roles", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  name: varchar("name", { length: 50 }).notNull().unique(), // TENANT | LANDLORD | ADMIN
+});
 
 // ─── Users ────────────────────────────────────────────────────────────────────
 export const users = pgTable("users", {
@@ -45,7 +57,7 @@ export const bookings = pgTable("bookings", {
   propertyId: uuid("property_id").notNull().references(() => properties.id),
   tenantId: uuid("tenant_id").notNull().references(() => users.id),
   startDate: date("start_date").notNull(),
-  endDate: date("end_date"),
+  endDate: date("end_date"),                   // nullable — open-ended tenancies
   totalAmount: decimal("total_amount", { precision: 12, scale: 2 }).notNull(),
   status: bookingStatusEnum("status").notNull().default("PENDING"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -83,4 +95,29 @@ export const expenses = pgTable("expenses", {
   date: date("date").notNull(),
   description: text("description"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+// ─── Phase 2: Accounting Engine (uncomment when ready) ───────────────────────
+
+export const accounts = pgTable("accounts", {
+   id: uuid("id").defaultRandom().primaryKey(),
+   name: varchar("name", { length: 255 }).notNull(),
+   type: accountTypeEnum("type").notNull(),
+   code: varchar("code", { length: 20 }).notNull().unique(),
+ });
+
+ export const journalEntries = pgTable("journal_entries", {
+   id: uuid("id").defaultRandom().primaryKey(),
+   date: date("date").notNull(),
+   description: text("description"),
+   createdBy: uuid("created_by").notNull().references(() => users.id),
+   createdAt: timestamp("created_at").defaultNow().notNull(),
+ });
+
+ export const journalLines = pgTable("journal_lines", {
+   id: uuid("id").defaultRandom().primaryKey(),
+   journalEntryId: uuid("journal_entry_id").notNull().references(() => journalEntries.id),
+   accountId: uuid("account_id").notNull().references(() => accounts.id),
+   debit: decimal("debit", { precision: 12, scale: 2 }).notNull().default("0"),
+   credit: decimal("credit", { precision: 12, scale: 2 }).notNull().default("0"),
 });
