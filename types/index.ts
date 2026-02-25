@@ -1,7 +1,7 @@
 import { InferSelectModel, InferInsertModel } from "drizzle-orm";
 import {
   users, properties, propertyImages,
-  bookings, invoices, payments, expenses, roles
+  bookings, invoices, payments, expenses, roles, rentalRequests
 } from "@/lib/db/schema";
 
 // ─── Select Types (reading from DB) ──────────────────────────────────────────
@@ -49,3 +49,7 @@ export type PaymentWithInvoice = Payment & {
   invoice: Invoice;
   recordedByUser: User;
 };
+
+export type RentalRequest = InferSelectModel<typeof rentalRequests>;
+export type NewRentalRequest = InferInsertModel<typeof rentalRequests>;
+export type RentalRequestStatus = "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
