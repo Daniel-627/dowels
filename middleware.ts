@@ -1,7 +1,7 @@
 import { auth } from "@/lib/auth";
 import { NextResponse } from "next/server";
 
-const publicRoutes = ["/login", "/register"];
+const publicRoutes = ["/", "/login", "/register", "/properties"];
 
 const roleRoutes: Record<string, string[]> = {
   "/studio": ["ADMIN"],
@@ -12,17 +12,23 @@ const roleRoutes: Record<string, string[]> = {
 
 export default auth((req) => {
   const { pathname } = req.nextUrl;
-  const isPublicRoute = publicRoutes.includes(pathname);
   const session = req.auth;
 
-  // Not logged in → redirect to login
+  // Allow public routes and anything under /properties
+  const isPublicRoute =
+    publicRoutes.includes(pathname) ||
+    pathname.startsWith("/properties");
+
+  // Not logged in → redirect to login (except public routes)
   if (!session && !isPublicRoute) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
   // Logged in → don't let them access login/register again
-  if (session && isPublicRoute) {
-    return NextResponse.redirect(new URL(`/dashboard/${session.user.role.toLowerCase()}`, req.url));
+  if (session && (pathname === "/login" || pathname === "/register")) {
+    return NextResponse.redirect(
+      new URL(`/dashboard/${session.user.role.toLowerCase()}`, req.url)
+    );
   }
 
   // Role-based protection
