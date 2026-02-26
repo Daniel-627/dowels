@@ -37,11 +37,13 @@ async function getImages(propertyId: string) {
 export default async function PropertyDetailPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
+  const { id } = await params;
+
   const [property, images] = await Promise.all([
-    getProperty(params.id),
-    getImages(params.id),
+    getProperty(id),
+    getImages(id),
   ]);
 
   if (!property) notFound();
