@@ -4,6 +4,7 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
+import { useSearchParams } from "next/navigation";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -16,6 +17,8 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const searchParams = useSearchParams();
+  const registered = searchParams.get("registered");
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -61,6 +64,12 @@ export default function LoginPage() {
 
         {/* Card */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+          {registered && (
+            <p className="text-sm text-green-600 bg-green-50 px-4 py-2.5 rounded-lg mb-4">
+              Account created! Sign in to continue.
+            </p>
+          )}
+          
           <h2 className="text-xl font-semibold text-gray-800 mb-6">Sign in to your account</h2>
 
           <form onSubmit={handleSubmit} className="space-y-5">

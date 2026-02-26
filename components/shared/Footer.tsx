@@ -9,7 +9,7 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <p className="text-lg font-bold text-gray-900">Dowels</p>
-            <p className="text-sm text-gray-400 mt-1">by OpenDoor</p>
+            <p className="text-sm text-gray-400 mt-1">by Dorcas Owela</p>
             <p className="text-sm text-gray-500 mt-3 leading-relaxed">
               A smarter way to manage rentals — for landlords, tenants, and everyone in between.
             </p>
