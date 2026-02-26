@@ -4,6 +4,7 @@ import { Property } from "@/types";
 
 interface PropertyCardProps {
   property: Property;
+  firstImage?: string | null;
 }
 
 const statusColors: Record<string, string> = {
@@ -12,14 +13,14 @@ const statusColors: Record<string, string> = {
   MAINTENANCE: "bg-yellow-100 text-yellow-700",
 };
 
-export default function PropertyCard({ property }: PropertyCardProps) {
+export default function PropertyCard({ property, firstImage }: PropertyCardProps) {
   return (
     <div className="group rounded-2xl border border-gray-100 bg-white overflow-hidden hover:shadow-md transition flex flex-col">
 
       {/* Image */}
       <div className="relative h-48 w-full bg-gray-100">
         <Image
-          src="/placeholder-property.jpg"
+          src={firstImage ?? "/placeholder-property.jpg"}
           alt={property.title}
           fill
           className="object-cover group-hover:scale-105 transition duration-300"

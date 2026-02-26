@@ -1,7 +1,8 @@
 import { client } from "@/sanity/lib/client";
 import { urlFor } from "@/sanity/lib/image";
 import { db } from "@/lib/db";
-import { properties } from "@/lib/db/schema";
+import { properties, propertyImages } from "@/lib/db/schema";
+
 import { eq } from "drizzle-orm";
 import Link from "next/link";
 import Image from "next/image";
@@ -19,10 +20,24 @@ async function getHomePage() {
 }
 
 async function getAvailableProperties() {
-  return await db
+  const props = await db
     .select()
     .from(properties)
     .where(eq(properties.isPublished, true));
+
+  // Get first image for each property
+  const withImages = await Promise.all(
+    props.map(async (p) => {
+      const images = await db
+        .select()
+        .from(propertyImages)
+        .where(eq(propertyImages.propertyId, p.id))
+        .limit(1);
+      return { ...p, firstImage: images[0]?.url ?? null };
+    })
+  );
+
+  return withImages;
 }
 
 export default async function HomePage() {
@@ -107,7 +122,7 @@ export default async function HomePage() {
           {availableProperties.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {availableProperties.map((property) => (
-                <PropertyCard key={property.id} property={property} />
+                <PropertyCard key={property.id} property={property} firstImage={property.firstImage}/>
               ))}
             </div>
           ) : (
