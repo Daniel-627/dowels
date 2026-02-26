@@ -63,7 +63,7 @@ export default async function HomePage() {
               {content?.heroSubtitle ?? "Browse verified rental properties. Simple, transparent, and hassle-free."}
             </p>
             <div className="mt-8 flex flex-col sm:flex-row gap-4">
-              
+              <a
                 href="#properties"
                 className="inline-flex items-center justify-center px-8 py-3 bg-white text-gray-900 font-medium rounded-lg hover:bg-gray-100 transition text-sm"
               >
