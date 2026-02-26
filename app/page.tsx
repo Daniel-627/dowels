@@ -1,7 +1,11 @@
 import { client } from "@/sanity/lib/client";
 import { urlFor } from "@/sanity/lib/image";
+import { db } from "@/lib/db";
+import { properties } from "@/lib/db/schema";
+import { eq } from "drizzle-orm";
 import Link from "next/link";
 import Image from "next/image";
+import PropertyCard from "@/components/shared/PropertyCard";
 
 async function getHomePage() {
   return await client.fetch(`
@@ -10,18 +14,22 @@ async function getHomePage() {
       heroSubtitle,
       heroCtaText,
       heroImage,
-      featuresTitle,
-      features[] {
-        icon,
-        title,
-        description
-      }
     }
   `);
 }
 
+async function getAvailableProperties() {
+  return await db
+    .select()
+    .from(properties)
+    .where(eq(properties.isPublished, true));
+}
+
 export default async function HomePage() {
-  const content = await getHomePage();
+  const [content, availableProperties] = await Promise.all([
+    getHomePage(),
+    getAvailableProperties(),
+  ]);
 
   return (
     <div className="flex flex-col">
@@ -29,8 +37,8 @@ export default async function HomePage() {
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section className="relative w-full min-h-[90vh] flex items-center">
 
-        {/* Background image */}
-        {content?.heroImage && (
+        {/* Background */}
+        {content?.heroImage ? (
           <div className="absolute inset-0 z-0">
             <Image
               src={urlFor(content.heroImage).width(1600).url()}
@@ -41,10 +49,7 @@ export default async function HomePage() {
             />
             <div className="absolute inset-0 bg-black/50" />
           </div>
-        )}
-
-        {/* Fallback background if no image */}
-        {!content?.heroImage && (
+        ) : (
           <div className="absolute inset-0 z-0 bg-gray-900" />
         )}
 
@@ -58,12 +63,12 @@ export default async function HomePage() {
               {content?.heroSubtitle ?? "Browse verified rental properties. Simple, transparent, and hassle-free."}
             </p>
             <div className="mt-8 flex flex-col sm:flex-row gap-4">
-              <Link
-                href="/properties"
+              
+                href="#properties"
                 className="inline-flex items-center justify-center px-8 py-3 bg-white text-gray-900 font-medium rounded-lg hover:bg-gray-100 transition text-sm"
               >
                 {content?.heroCtaText ?? "Browse Properties"}
-              </Link>
+              </a>
               <Link
                 href="/login"
                 className="inline-flex items-center justify-center px-8 py-3 border border-white text-white font-medium rounded-lg hover:bg-white/10 transition text-sm"
@@ -73,53 +78,44 @@ export default async function HomePage() {
             </div>
           </div>
         </div>
+
+        {/* Scroll indicator */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce">
+          <svg className="w-6 h-6 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
       </section>
 
-      {/* ── Features ─────────────────────────────────────────────────────── */}
-      {content?.features?.length > 0 && (
-        <section className="py-24 bg-white">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6">
-            <h2 className="text-3xl font-bold text-gray-900 text-center">
-              {content?.featuresTitle ?? "Why Dowels?"}
-            </h2>
-            <p className="mt-4 text-gray-500 text-center max-w-xl mx-auto text-sm">
-              Everything you need to find, rent, and manage your home in one place.
-            </p>
-            <div className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-8">
-              {content.features.map((feature: any, i: number) => (
-                <div
-                  key={i}
-                  className="flex flex-col items-start p-6 rounded-2xl border border-gray-100 hover:shadow-md transition"
-                >
-                  <span className="text-4xl">{feature.icon}</span>
-                  <h3 className="mt-4 text-lg font-semibold text-gray-900">
-                    {feature.title}
-                  </h3>
-                  <p className="mt-2 text-sm text-gray-500 leading-relaxed">
-                    {feature.description}
-                  </p>
-                </div>
-              ))}
+      {/* ── Properties ───────────────────────────────────────────────────── */}
+      <section id="properties" className="py-24 bg-gray-50">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+
+          {/* Section header */}
+          <div className="flex items-end justify-between mb-10">
+            <div>
+              <h2 className="text-3xl font-bold text-gray-900">
+                Available Properties
+              </h2>
+              <p className="mt-2 text-sm text-gray-500">
+                {availableProperties.length} propert{availableProperties.length === 1 ? "y" : "ies"} available right now
+              </p>
             </div>
           </div>
-        </section>
-      )}
 
-      {/* ── CTA Banner ───────────────────────────────────────────────────── */}
-      <section className="py-20 bg-gray-900">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 text-center">
-          <h2 className="text-3xl font-bold text-white">
-            Ready to find your next home?
-          </h2>
-          <p className="mt-4 text-gray-400 text-sm max-w-lg mx-auto">
-            Browse our listed properties and submit a rental request in minutes.
-          </p>
-          <Link
-            href="/properties"
-            className="mt-8 inline-flex items-center justify-center px-8 py-3 bg-white text-gray-900 font-medium rounded-lg hover:bg-gray-100 transition text-sm"
-          >
-            View All Properties
-          </Link>
+          {/* Grid */}
+          {availableProperties.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {availableProperties.map((property) => (
+                <PropertyCard key={property.id} property={property} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-24 text-gray-400">
+              <p className="text-lg font-medium">No properties available right now</p>
+              <p className="text-sm mt-2">Check back soon — new listings are added regularly.</p>
+            </div>
+          )}
         </div>
       </section>
 
