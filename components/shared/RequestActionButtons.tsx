@@ -28,20 +28,20 @@ export default function RequestActionButtons({ requestId }: { requestId: string 
 
   return (
     <div className="flex flex-col gap-2 sm:w-36 shrink-0">
-      <button
+     <button
         onClick={() => handleAction("approve")}
         disabled={loading !== null}
         className="w-full px-4 py-2.5 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition disabled:opacity-50"
-      >
-        {loading === "approve" ? "..." : "✓ Approve"}
-      </button>
-      <button
+     >
+        {loading === "approve" ? "..." : "Approve"}
+     </button>
+     <button
         onClick={() => handleAction("reject")}
         disabled={loading !== null}
         className="w-full px-4 py-2.5 bg-red-50 text-red-600 text-sm font-medium rounded-lg hover:bg-red-100 transition disabled:opacity-50"
-      >
-        {loading === "reject" ? "..." : "✕ Reject"}
-      </button>
+     >
+        {loading === "reject" ? "..." : "Reject"}
+     </button>
     </div>
   );
 }
