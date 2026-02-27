@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { bookings, users, properties, rentalRequests } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
@@ -43,8 +43,12 @@ async function getApprovedRequestsWithoutBooking(landlordId: string) {
     .from(rentalRequests)
     .leftJoin(users, eq(rentalRequests.tenantId, users.id))
     .leftJoin(properties, eq(rentalRequests.propertyId, properties.id))
-    .where(eq(rentalRequests.status, "APPROVED"))
-    .where(eq(properties.landlordId, landlordId));
+    .where(
+  and(
+    eq(rentalRequests.status, "APPROVED"),
+    eq(properties.landlordId, landlordId)
+  )
+);
 }
 
 const statusStyles: Record<string, string> = {

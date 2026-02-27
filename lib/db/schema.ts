@@ -93,7 +93,7 @@ export const invoices = pgTable("invoices", {
   type: invoiceTypeEnum("type").notNull().default("RENT"),
   amount: decimal("amount", { precision: 12, scale: 2 }).notNull(),
   dueDate: date("due_date").notNull(),
-  period: varchar("period", { length: 7 }).notNull(),
+  period: varchar("period", { length: 7 }),
   status: invoiceStatusEnum("status").notNull().default("UNPAID"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
