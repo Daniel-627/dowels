@@ -50,6 +50,7 @@ export async function POST(req: NextRequest) {
         method: parsed.data.method,
         paidAt: new Date(parsed.data.paidAt),
         recordedBy: session.user.id,
+        
       })
       .returning();
 
