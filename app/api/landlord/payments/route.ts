@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
         invoiceId: parsed.data.invoiceId,
         amount: String(parsed.data.amount),
         method: parsed.data.method,
-        paidAt: parsed.data.paidAt,
+        paidAt: new Date(parsed.data.paidAt),
         recordedBy: session.user.id,
       })
       .returning();
