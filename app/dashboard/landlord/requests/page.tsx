@@ -1,12 +1,12 @@
 import { db } from "@/lib/db";
-import { rentalRequests, users, properties } from "@/lib/db/schema";
+import { rentalRequests, users, properties, bookings } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import RequestActionButtons from "@/components/shared/RequestActionButtons";
 
 async function getLandlordRequests(landlordId: string) {
-  return await db
+  const requests = await db
     .select({
       id: rentalRequests.id,
       status: rentalRequests.status,
@@ -29,6 +29,21 @@ async function getLandlordRequests(landlordId: string) {
     .leftJoin(properties, eq(rentalRequests.propertyId, properties.id))
     .where(eq(properties.landlordId, landlordId))
     .orderBy(rentalRequests.createdAt);
+
+  // For APPROVED requests, check if a booking has been created
+  const withBookingStatus = await Promise.all(
+    requests.map(async (req) => {
+      if (req.status !== "APPROVED") return { ...req, hasBooking: false };
+      const existing = await db
+        .select()
+        .from(bookings)
+        .where(eq(bookings.rentalRequestId, req.id))
+        .limit(1);
+      return { ...req, hasBooking: existing.length > 0 };
+    })
+  );
+
+  return withBookingStatus;
 }
 
 const statusStyles: Record<string, string> = {
@@ -43,8 +58,19 @@ export default async function LandlordRequestsPage() {
   if (!session) redirect("/login");
 
   const requests = await getLandlordRequests(session.user.id);
-  const pending = requests.filter((r) => ["PENDING", "APPROVED"].includes(r.status));
-  const reviewed = requests.filter((r) => ["REJECTED", "CANCELLED"].includes(r.status));
+
+  // PENDING stays in pending
+  // APPROVED with no booking stays in pending (can still revoke)
+  // APPROVED with booking moves to reviewed
+  // REJECTED and CANCELLED go to reviewed
+  const pending = requests.filter((r) =>
+    r.status === "PENDING" || (r.status === "APPROVED" && !r.hasBooking)
+  );
+  const reviewed = requests.filter((r) =>
+    r.status === "REJECTED" ||
+    r.status === "CANCELLED" ||
+    (r.status === "APPROVED" && r.hasBooking)
+  );
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -67,7 +93,11 @@ export default async function LandlordRequestsPage() {
             {pending.map((req) => (
               <div
                 key={req.id}
-                className="bg-white rounded-2xl border border-yellow-100 p-6"
+                className={`bg-white rounded-2xl border p-6 ${
+                  req.status === "APPROVED"
+                    ? "border-green-100"
+                    : "border-yellow-100"
+                }`}
               >
                 <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                   <div className="flex-1 space-y-3">
@@ -146,7 +176,10 @@ export default async function LandlordRequestsPage() {
                     )}
                   </div>
 
-                  <RequestActionButtons requestId={req.id} currentStatus={req.status}/>
+                  <RequestActionButtons
+                    requestId={req.id}
+                    currentStatus={req.status}
+                  />
                 </div>
               </div>
             ))}
