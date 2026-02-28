@@ -43,8 +43,8 @@ export default async function LandlordRequestsPage() {
   if (!session) redirect("/login");
 
   const requests = await getLandlordRequests(session.user.id);
-  const pending = requests.filter((r) => r.status === "PENDING");
-  const reviewed = requests.filter((r) => r.status !== "PENDING");
+  const pending = requests.filter((r) => ["PENDING", "APPROVED"].includes(r.status));
+  const reviewed = requests.filter((r) => ["REJECTED", "CANCELLED"].includes(r.status));
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -146,7 +146,7 @@ export default async function LandlordRequestsPage() {
                     )}
                   </div>
 
-                  <RequestActionButtons requestId={req.id} />
+                  <RequestActionButtons requestId={req.id} currentStatus={req.status}/>
                 </div>
               </div>
             ))}

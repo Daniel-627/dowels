@@ -29,7 +29,7 @@ async function getLandlordBookings(landlordId: string) {
 }
 
 async function getApprovedRequestsWithoutBooking(landlordId: string) {
-  return await db
+  const approved = await db
     .select({
       id: rentalRequests.id,
       moveInDate: rentalRequests.moveInDate,
@@ -44,11 +44,25 @@ async function getApprovedRequestsWithoutBooking(landlordId: string) {
     .leftJoin(users, eq(rentalRequests.tenantId, users.id))
     .leftJoin(properties, eq(rentalRequests.propertyId, properties.id))
     .where(
-  and(
-    eq(rentalRequests.status, "APPROVED"),
-    eq(properties.landlordId, landlordId)
-  )
-);
+      and(
+        eq(rentalRequests.status, "APPROVED"),
+        eq(properties.landlordId, landlordId)
+      )
+    );
+
+  // Filter out requests that already have a booking
+  const results = await Promise.all(
+    approved.map(async (req) => {
+      const existing = await db
+        .select()
+        .from(bookings)
+        .where(eq(bookings.rentalRequestId, req.id))
+        .limit(1);
+      return existing.length === 0 ? req : null;
+    })
+  );
+
+  return results.filter((r): r is NonNullable<typeof r> => r !== null);
 }
 
 const statusStyles: Record<string, string> = {
