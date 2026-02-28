@@ -55,11 +55,7 @@ export async function POST(req: NextRequest) {
       })
       .returning();
 
-    // Update property status to OCCUPIED
-    await db
-      .update(properties)
-      .set({ status: "OCCUPIED" })
-      .where(eq(properties.id, parsed.data.propertyId));
+
 
     // Mark rental request as approved
     await db

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { rentalRequests } from "@/lib/db/schema";
+import { rentalRequests, properties } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { z } from "zod";
@@ -25,6 +25,18 @@ export async function PATCH(req: NextRequest) {
       return NextResponse.json({ success: false, error: "Invalid request" }, { status: 400 });
     }
 
+    // Get the request to find the property
+    const request = await db
+      .select()
+      .from(rentalRequests)
+      .where(eq(rentalRequests.id, parsed.data.requestId))
+      .limit(1);
+
+    if (!request[0]) {
+      return NextResponse.json({ success: false, error: "Request not found" }, { status: 404 });
+    }
+
+    // Update request status
     await db
       .update(rentalRequests)
       .set({
@@ -33,6 +45,21 @@ export async function PATCH(req: NextRequest) {
         reviewedAt: new Date(),
       })
       .where(eq(rentalRequests.id, parsed.data.requestId));
+
+    // Update property status based on decision
+    if (parsed.data.status === "APPROVED") {
+      // Lock the property — no more requests
+      await db
+        .update(properties)
+        .set({ status: "OCCUPIED" })
+        .where(eq(properties.id, request[0].propertyId));
+    } else if (parsed.data.status === "REJECTED") {
+      // Free the property back up
+      await db
+        .update(properties)
+        .set({ status: "AVAILABLE" })
+        .where(eq(properties.id, request[0].propertyId));
+    }
 
     return NextResponse.json({ success: true });
 

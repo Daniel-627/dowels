@@ -4,6 +4,7 @@ import { eq, and } from "drizzle-orm";
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import Link from "next/link";
+import EndBookingButton from "@/components/shared/EndBookingButton";
 
 async function getBooking(id: string, landlordId: string) {
   const result = await db
@@ -103,6 +104,9 @@ export default async function BookingDetailPage({
         >
           ← Back to Bookings
         </Link>
+        {booking.status === "ACTIVE" && (
+          <EndBookingButton bookingId={booking.id} />
+        )}
         <h1 className="text-2xl font-bold text-gray-900">
           {booking.propertyTitle}
         </h1>
