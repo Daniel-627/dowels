@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { rentalRequests, bookings, invoices, properties, users } from "@/lib/db/schema";
-import { eq, and, sum } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
@@ -8,7 +8,7 @@ import Link from "next/link";
 async function getTenantOverview(tenantId: string) {
   const [
     tenantRequests,
-    activeBooking,
+    activeBookings,
     unpaidInvoices,
   ] = await Promise.all([
     db
@@ -44,8 +44,7 @@ async function getTenantOverview(tenantId: string) {
           eq(bookings.tenantId, tenantId),
           eq(bookings.status, "ACTIVE")
         )
-      )
-      .limit(1),
+      ),
 
     db
       .select({
@@ -74,7 +73,7 @@ async function getTenantOverview(tenantId: string) {
 
   return {
     requests: tenantRequests,
-    activeBooking: activeBooking[0] ?? null,
+    activeBookings,
     unpaidInvoices,
     totalDue,
   };
@@ -91,7 +90,7 @@ export default async function TenantOverviewPage() {
   const session = await auth();
   if (!session) redirect("/login");
 
-  const { requests, activeBooking, unpaidInvoices, totalDue } =
+  const { requests, activeBookings, unpaidInvoices, totalDue } =
     await getTenantOverview(session.user.id);
 
   return (
@@ -107,34 +106,43 @@ export default async function TenantOverviewPage() {
         </p>
       </div>
 
-      {/* Active booking */}
-      {activeBooking ? (
-        <div className="bg-gray-900 rounded-2xl p-6 text-white mb-6">
-          <p className="text-xs text-gray-400 uppercase tracking-wide mb-3">
-            Active Tenancy
-          </p>
-          <h2 className="text-xl font-bold">{activeBooking.propertyTitle}</h2>
-          <p className="text-gray-400 text-sm mt-1">{activeBooking.propertyLocation}</p>
-          <div className="mt-4 flex items-center justify-between">
-            <div>
-              <p className="text-xs text-gray-400">Monthly Rent</p>
-              <p className="text-lg font-bold mt-0.5">
-                KES {Number(activeBooking.totalAmount).toLocaleString()}
-              </p>
-            </div>
-            <div>
-              <p className="text-xs text-gray-400">Start Date</p>
-              <p className="text-sm font-medium mt-0.5">
-                {new Date(activeBooking.startDate).toLocaleDateString("en-KE", {
-                  day: "numeric", month: "short", year: "numeric",
-                })}
-              </p>
-            </div>
-            <div>
-              <p className="text-xs text-gray-400">Landlord</p>
-              <p className="text-sm font-medium mt-0.5">{activeBooking.landlordName}</p>
-              <p className="text-xs text-gray-500">{activeBooking.landlordEmail}</p>
-            </div>
+      {/* Active bookings */}
+      {activeBookings.length > 0 ? (
+        <div className="mb-6">
+          <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3">
+            Active Tenancies
+          </h2>
+          <div className="flex flex-col gap-3">
+            {activeBookings.map((booking) => (
+              <div key={booking.id} className="bg-gray-900 rounded-2xl p-6 text-white">
+                <h2 className="text-xl font-bold">{booking.propertyTitle}</h2>
+                <p className="text-gray-400 text-sm mt-1">{booking.propertyLocation}</p>
+                <div className="mt-4 flex items-center justify-between flex-wrap gap-4">
+                  <div>
+                    <p className="text-xs text-gray-400">Monthly Rent</p>
+                    <p className="text-lg font-bold mt-0.5">
+                      KES {Number(booking.totalAmount).toLocaleString()}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-400">Start Date</p>
+                    <p className="text-sm font-medium mt-0.5">
+                      {new Date(booking.startDate).toLocaleDateString("en-KE", {
+                        day: "numeric", month: "short", year: "numeric",
+                      })}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-400">Landlord</p>
+                    <p className="text-sm font-medium mt-0.5">{booking.landlordName}</p>
+                    <p className="text-xs text-gray-500">{booking.landlordEmail}</p>
+                    {booking.landlordPhone && (
+                      <p className="text-xs text-gray-500">{booking.landlordPhone}</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       ) : (
