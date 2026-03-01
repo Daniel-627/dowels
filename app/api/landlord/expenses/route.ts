@@ -4,6 +4,7 @@ import { expenses, properties } from "@/lib/db/schema";
 import { auth } from "@/lib/auth";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
+import { recordExpenseJournal } from "@/lib/accounting";
 
 const schema = z.object({
   propertyId: z.string().uuid(),
@@ -13,6 +14,10 @@ const schema = z.object({
   date: z.string().min(1),
   description: z.string().optional(),
 });
+
+
+
+
 
 export async function POST(req: NextRequest) {
   try {
@@ -54,6 +59,14 @@ export async function POST(req: NextRequest) {
         ...(parsed.data.description ? { description: parsed.data.description } : {}),
       })
       .returning();
+
+      // After recording the expense, add:
+      await recordExpenseJournal({
+        amount: parsed.data.amount,
+        category: parsed.data.category,
+        createdBy: session.user.id,
+        description: `${parsed.data.title} — ${parsed.data.category}`,
+      });
 
     return NextResponse.json({ success: true, data: expense[0] }, { status: 201 });
 

@@ -4,6 +4,7 @@ import { eq } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import ReportsClient from "@/components/shared/ReportsClient";
+import PLStatement from "@/components/shared/PLStatement";
 
 async function getPlatformReportData() {
   const [allPayments, allExpenses, allInvoices] = await Promise.all([
@@ -91,6 +92,10 @@ export default async function AdminReportsPage() {
         </p>
       </div>
       <ReportsClient data={data} />
+
+      <div className="mt-8">
+        <PLStatement />
+      </div>
     </div>
   );
 }

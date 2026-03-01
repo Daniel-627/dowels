@@ -4,6 +4,7 @@ import { payments, invoices } from "@/lib/db/schema";
 import { auth } from "@/lib/auth";
 import { eq, sum } from "drizzle-orm";
 import { z } from "zod";
+import { recordPaymentJournal } from "@/lib/accounting";
 
 const schema = z.object({
   invoiceId: z.string().uuid(),
@@ -53,6 +54,16 @@ export async function POST(req: NextRequest) {
         
       })
       .returning();
+
+    
+
+      // After recording the payment.
+      await recordPaymentJournal({
+        amount: parsed.data.amount,
+        invoiceType: invoice[0].type as "RENT" | "UTILITY" | "OTHER",
+        createdBy: session.user.id,
+        description: `Payment recorded for invoice ${parsed.data.invoiceId}`,
+      });
 
     // Calculate total paid so far
     const totalPaidResult = await db
