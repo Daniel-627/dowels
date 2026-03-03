@@ -45,7 +45,6 @@ export default function LoginPage() {
       return;
     }
 
-    // Fetch session to get role then redirect
     const res = await fetch("/api/auth/session");
     const session = await res.json();
     const role = session?.user?.role?.toLowerCase();
@@ -53,28 +52,26 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
 
-        {/* Logo / Brand */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Dowels</h1>
+        <div className="text-center mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Dowels</h1>
           <p className="text-gray-500 mt-1 text-sm">Rental Management by OpenDoor</p>
         </div>
 
-        {/* Card */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 sm:p-8">
           {registered && (
             <p className="text-sm text-green-600 bg-green-50 px-4 py-2.5 rounded-lg mb-4">
               Account created! Sign in to continue.
             </p>
           )}
-          
-          <h2 className="text-xl font-semibold text-gray-800 mb-6">Sign in to your account</h2>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-5 sm:mb-6">
+            Sign in to your account
+          </h2>
 
-            {/* Email */}
+          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Email
@@ -89,7 +86,6 @@ export default function LoginPage() {
               />
             </div>
 
-            {/* Password */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Password
@@ -104,14 +100,12 @@ export default function LoginPage() {
               />
             </div>
 
-            {/* Error */}
             {error && (
               <p className="text-sm text-red-500 bg-red-50 px-4 py-2.5 rounded-lg">
                 {error}
               </p>
             )}
 
-            {/* Submit */}
             <button
               type="submit"
               disabled={loading}
@@ -119,14 +113,19 @@ export default function LoginPage() {
             >
               {loading ? "Signing in..." : "Sign in"}
             </button>
-
           </form>
+
+          <p className="text-center text-sm text-gray-500 mt-5">
+            Don't have an account?{" "}
+            <a href="/register" className="text-gray-900 font-medium hover:underline">
+              Register
+            </a>
+          </p>
         </div>
 
         <p className="text-center text-xs text-gray-400 mt-6">
           © {new Date().getFullYear()} OpenDoor. All rights reserved.
         </p>
-
       </div>
     </div>
   );

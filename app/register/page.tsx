@@ -63,7 +63,6 @@ export default function RegisterPage() {
       return;
     }
 
-    // Redirect to login after successful registration
     router.push("/login?registered=true");
   }
 
@@ -71,24 +70,20 @@ export default function RegisterPage() {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
 
-        {/* Brand */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Dowels</h1>
+        <div className="text-center mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Dowels</h1>
           <p className="text-gray-500 mt-1 text-sm">by OpenDoor</p>
         </div>
 
-        {/* Card */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
-          <h2 className="text-xl font-semibold text-gray-800 mb-2">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 sm:p-8">
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-1 sm:mb-2">
             Create your account
           </h2>
-          <p className="text-sm text-gray-500 mb-6">
+          <p className="text-sm text-gray-500 mb-5 sm:mb-6">
             Register to request a rental property.
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-
-            {/* Name */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Full Name
@@ -104,7 +99,6 @@ export default function RegisterPage() {
               />
             </div>
 
-            {/* Email */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Email
@@ -120,7 +114,6 @@ export default function RegisterPage() {
               />
             </div>
 
-            {/* Phone */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Phone <span className="text-gray-400 font-normal">(optional)</span>
@@ -135,7 +128,6 @@ export default function RegisterPage() {
               />
             </div>
 
-            {/* Password */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Password
@@ -151,7 +143,6 @@ export default function RegisterPage() {
               />
             </div>
 
-            {/* Confirm Password */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Confirm Password
@@ -167,14 +158,12 @@ export default function RegisterPage() {
               />
             </div>
 
-            {/* Error */}
             {error && (
               <p className="text-sm text-red-500 bg-red-50 px-4 py-2.5 rounded-lg">
                 {error}
               </p>
             )}
 
-            {/* Submit */}
             <button
               type="submit"
               disabled={loading}
@@ -182,7 +171,6 @@ export default function RegisterPage() {
             >
               {loading ? "Creating account..." : "Create Account"}
             </button>
-
           </form>
         </div>
 

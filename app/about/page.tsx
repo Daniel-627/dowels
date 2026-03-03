@@ -2,31 +2,31 @@ import Link from "next/link";
 
 export default function AboutPage() {
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-24">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
 
       {/* Hero */}
-      <div className="max-w-2xl mb-20">
-        <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">
+      <div className="max-w-2xl mb-14 sm:mb-20">
+        <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3 sm:mb-4">
           About Dowels
         </p>
-        <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 leading-tight">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
           Rental management, built for Kenya.
         </h1>
-        <p className="mt-6 text-lg text-gray-500 leading-relaxed">
+        <p className="mt-4 sm:mt-6 text-base sm:text-lg text-gray-500 leading-relaxed">
           Dowels is a property rental platform that connects landlords and tenants
           through a simple, transparent process. No middlemen, no confusion —
           just clear agreements and organised records.
         </p>
-        <div className="mt-8 flex gap-4">
+        <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4">
           <Link
             href="/#properties"
-            className="inline-flex items-center px-6 py-3 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-700 transition"
+            className="inline-flex items-center justify-center px-6 py-3 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-700 transition"
           >
             Browse Properties
           </Link>
           <Link
             href="/contact"
-            className="inline-flex items-center px-6 py-3 border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition"
+            className="inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition"
           >
             Get in Touch
           </Link>
@@ -34,8 +34,8 @@ export default function AboutPage() {
       </div>
 
       {/* Mission */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-20">
-        <div className="p-6 bg-gray-50 rounded-2xl">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-8 mb-14 sm:mb-20">
+        <div className="p-5 sm:p-6 bg-gray-50 rounded-2xl">
           <p className="text-2xl mb-3">🏠</p>
           <h3 className="font-semibold text-gray-900 mb-2">For Tenants</h3>
           <p className="text-sm text-gray-500 leading-relaxed">
@@ -43,7 +43,7 @@ export default function AboutPage() {
             and payment history — all in one place.
           </p>
         </div>
-        <div className="p-6 bg-gray-50 rounded-2xl">
+        <div className="p-5 sm:p-6 bg-gray-50 rounded-2xl">
           <p className="text-2xl mb-3">🔑</p>
           <h3 className="font-semibold text-gray-900 mb-2">For Landlords</h3>
           <p className="text-sm text-gray-500 leading-relaxed">
@@ -51,7 +51,7 @@ export default function AboutPage() {
             record payments and track expenses with ease.
           </p>
         </div>
-        <div className="p-6 bg-gray-50 rounded-2xl">
+        <div className="p-5 sm:p-6 bg-gray-50 rounded-2xl">
           <p className="text-2xl mb-3">📊</p>
           <h3 className="font-semibold text-gray-900 mb-2">Clear Financials</h3>
           <p className="text-sm text-gray-500 leading-relaxed">
@@ -62,12 +62,12 @@ export default function AboutPage() {
       </div>
 
       {/* Company */}
-      <div className="border-t border-gray-100 pt-16 grid grid-cols-1 sm:grid-cols-2 gap-12 items-center">
+      <div className="border-t border-gray-100 pt-12 sm:pt-16 grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-12 items-center">
         <div>
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">
+          <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3 sm:mb-4">
             Our Company
           </p>
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">
             A product of OpenDoor
           </h2>
           <p className="text-sm text-gray-500 leading-relaxed">
@@ -77,20 +77,20 @@ export default function AboutPage() {
             affordable and straightforward for everyone.
           </p>
         </div>
-        <div className="bg-gray-900 rounded-2xl p-8 text-white">
-          <p className="text-xs text-gray-400 uppercase tracking-widest mb-6">
+        <div className="bg-gray-900 rounded-2xl p-6 sm:p-8 text-white">
+          <p className="text-xs text-gray-400 uppercase tracking-widest mb-4 sm:mb-6">
             By the numbers
           </p>
-          <div className="space-y-4">
-            <div className="flex justify-between items-center border-b border-white/10 pb-4">
+          <div className="space-y-3 sm:space-y-4">
+            <div className="flex justify-between items-center border-b border-white/10 pb-3 sm:pb-4">
               <span className="text-sm text-gray-300">Platform</span>
               <span className="font-semibold">Dowels v1.0</span>
             </div>
-            <div className="flex justify-between items-center border-b border-white/10 pb-4">
+            <div className="flex justify-between items-center border-b border-white/10 pb-3 sm:pb-4">
               <span className="text-sm text-gray-300">Market</span>
               <span className="font-semibold">Kenya</span>
             </div>
-            <div className="flex justify-between items-center border-b border-white/10 pb-4">
+            <div className="flex justify-between items-center border-b border-white/10 pb-3 sm:pb-4">
               <span className="text-sm text-gray-300">Currency</span>
               <span className="font-semibold">KES</span>
             </div>
@@ -101,7 +101,6 @@ export default function AboutPage() {
           </div>
         </div>
       </div>
-
     </div>
   );
 }

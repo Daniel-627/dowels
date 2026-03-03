@@ -220,7 +220,7 @@ export default function PLStatement() {
             <div className="flex items-center justify-between py-2 bg-red-50 rounded-lg px-3">
               <p className="text-sm font-semibold text-red-700">Total Expenses</p>
               <p className="text-sm font-bold text-red-700">
-                KES {data.summary?.totalExpenses.toLocaleString() ?? data.totalExpenses.toLocaleString()}
+                KES {data.totalExpenses.toLocaleString()}
               </p>
             </div>
           </div>

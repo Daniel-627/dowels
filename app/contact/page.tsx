@@ -2,28 +2,27 @@ import Link from "next/link";
 
 export default function ContactPage() {
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-24">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
 
       {/* Header */}
-      <div className="max-w-xl mb-16">
-        <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">
+      <div className="max-w-xl mb-12 sm:mb-16">
+        <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3 sm:mb-4">
           Contact Us
         </p>
-        <h1 className="text-4xl font-bold text-gray-900 leading-tight">
+        <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight">
           We'd love to hear from you.
         </h1>
-        <p className="mt-4 text-gray-500 leading-relaxed">
+        <p className="mt-3 sm:mt-4 text-gray-500 leading-relaxed text-sm sm:text-base">
           Whether you're a landlord looking to list your property, a tenant with
           a question, or someone who wants to partner with us — reach out.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
 
         {/* Contact details */}
-        <div className="space-y-6">
-
-          <div className="bg-gray-50 rounded-2xl p-6">
+        <div className="space-y-4 sm:space-y-6">
+          <div className="bg-gray-50 rounded-2xl p-5 sm:p-6">
             <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">
               Get in Touch
             </p>
@@ -64,7 +63,7 @@ export default function ContactPage() {
             </div>
           </div>
 
-          <div className="bg-gray-900 rounded-2xl p-6 text-white">
+          <div className="bg-gray-900 rounded-2xl p-5 sm:p-6 text-white">
             <p className="text-xs text-gray-400 uppercase tracking-widest mb-3">
               For Landlords
             </p>
@@ -79,23 +78,21 @@ export default function ContactPage() {
               Create Account
             </Link>
           </div>
-
         </div>
 
         {/* FAQ */}
-        <div className="bg-white rounded-2xl border border-gray-100 p-6">
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-6">
+        <div className="bg-white rounded-2xl border border-gray-100 p-5 sm:p-6">
+          <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-5 sm:mb-6">
             Frequently Asked
           </p>
-          <div className="space-y-6">
+          <div className="space-y-5 sm:space-y-6">
             <div>
               <h3 className="text-sm font-semibold text-gray-900 mb-1">
                 How do I apply for a property?
               </h3>
               <p className="text-xs text-gray-500 leading-relaxed">
                 Browse available properties, create a free account, and submit a
-                rental request with your details. The landlord will review and
-                respond.
+                rental request with your details. The landlord will review and respond.
               </p>
             </div>
             <div className="border-t border-gray-50 pt-5">
@@ -128,7 +125,6 @@ export default function ContactPage() {
             </div>
           </div>
         </div>
-
       </div>
     </div>
   );
