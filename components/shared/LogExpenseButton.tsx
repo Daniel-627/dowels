@@ -89,12 +89,12 @@ export default function LogExpenseButton({ properties }: { properties: Property[
       </button>
 
       {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+        <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center px-4 pt-8 sm:pt-0">
           <div
             className="absolute inset-0 bg-black/40"
             onClick={() => setOpen(false)}
           />
-          <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-md p-6 z-10">
+          <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-md p-4 sm:p-6 z-10 max-h-[90vh] overflow-y-auto">
             <h2 className="text-lg font-semibold text-gray-900 mb-5">
               Log Expense
             </h2>
@@ -152,7 +152,7 @@ export default function LogExpenseButton({ properties }: { properties: Property[
                 </select>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Amount (KES)
@@ -203,20 +203,20 @@ export default function LogExpenseButton({ properties }: { properties: Property[
                 </p>
               )}
 
-              <div className="flex gap-3 pt-2">
+              <div className="flex flex-col-reverse sm:flex-row gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setOpen(false)}
+                  className="w-full sm:w-auto px-6 py-2.5 rounded-lg text-sm font-medium text-gray-600 border border-gray-300 hover:bg-gray-50 transition"
+                >
+                  Cancel
+                </button>
                 <button
                   type="submit"
                   disabled={loading}
                   className="flex-1 bg-gray-900 text-white py-2.5 rounded-lg text-sm font-medium hover:bg-gray-700 transition disabled:opacity-50"
                 >
                   {loading ? "Saving..." : "Log Expense"}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setOpen(false)}
-                  className="px-6 py-2.5 rounded-lg text-sm font-medium text-gray-600 border border-gray-300 hover:bg-gray-50 transition"
-                >
-                  Cancel
                 </button>
               </div>
             </form>

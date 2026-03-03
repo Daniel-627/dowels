@@ -37,7 +37,6 @@ export default function CreateInvoiceButton({ bookings }: { bookings: Booking[] 
   ) {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
-    // Auto-fill amount when booking selected and type is RENT
     if (e.target.name === "bookingId") {
       const booking = bookings.find((b) => b.id === e.target.value);
       if (booking && form.type === "RENT") {
@@ -93,21 +92,19 @@ export default function CreateInvoiceButton({ bookings }: { bookings: Booking[] 
         + Create Invoice
       </button>
 
-      {/* Modal */}
       {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+        <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center px-4 pt-8 sm:pt-0">
           <div
             className="absolute inset-0 bg-black/40"
             onClick={() => setOpen(false)}
           />
-          <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-md p-6 z-10">
+          <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-md p-4 sm:p-6 z-10 max-h-[90vh] overflow-y-auto">
             <h2 className="text-lg font-semibold text-gray-900 mb-5">
               Create Invoice
             </h2>
 
             <form onSubmit={handleSubmit} className="space-y-4">
 
-              {/* Booking */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Booking
@@ -135,7 +132,6 @@ export default function CreateInvoiceButton({ bookings }: { bookings: Booking[] 
                 )}
               </div>
 
-              {/* Type */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Invoice Type
@@ -153,7 +149,6 @@ export default function CreateInvoiceButton({ bookings }: { bookings: Booking[] 
                 </select>
               </div>
 
-              {/* Amount */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Amount (KES)
@@ -169,7 +164,6 @@ export default function CreateInvoiceButton({ bookings }: { bookings: Booking[] 
                 />
               </div>
 
-              {/* Period */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Period <span className="text-gray-400 font-normal">(e.g. 2026-03)</span>
@@ -184,7 +178,6 @@ export default function CreateInvoiceButton({ bookings }: { bookings: Booking[] 
                 />
               </div>
 
-              {/* Due Date */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Due Date
@@ -206,20 +199,20 @@ export default function CreateInvoiceButton({ bookings }: { bookings: Booking[] 
                 </p>
               )}
 
-              <div className="flex gap-3 pt-2">
+              <div className="flex flex-col-reverse sm:flex-row gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setOpen(false)}
+                  className="w-full sm:w-auto px-6 py-2.5 rounded-lg text-sm font-medium text-gray-600 border border-gray-300 hover:bg-gray-50 transition"
+                >
+                  Cancel
+                </button>
                 <button
                   type="submit"
                   disabled={loading || bookings.length === 0}
                   className="flex-1 bg-gray-900 text-white py-2.5 rounded-lg text-sm font-medium hover:bg-gray-700 transition disabled:opacity-50"
                 >
                   {loading ? "Creating..." : "Create Invoice"}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setOpen(false)}
-                  className="px-6 py-2.5 rounded-lg text-sm font-medium text-gray-600 border border-gray-300 hover:bg-gray-50 transition"
-                >
-                  Cancel
                 </button>
               </div>
             </form>

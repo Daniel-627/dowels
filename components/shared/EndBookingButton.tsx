@@ -37,7 +37,7 @@ export default function EndBookingButton({ bookingId }: { bookingId: string }) {
   }
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex flex-wrap items-center gap-2">
       <span className="text-xs text-gray-500">Are you sure?</span>
       <button
         onClick={handleEnd}
