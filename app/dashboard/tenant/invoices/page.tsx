@@ -53,7 +53,7 @@ export default async function TenantInvoicesPage() {
 
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">My Invoices</h1>
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-900">My Invoices</h1>
         <p className="text-sm text-gray-500 mt-1">
           {tenantInvoices.length} invoice{tenantInvoices.length === 1 ? "" : "s"} total
         </p>
@@ -77,8 +77,8 @@ export default async function TenantInvoicesPage() {
 
       {/* Invoices */}
       {tenantInvoices.length > 0 ? (
-        <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-          <table className="w-full text-sm">
+        <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden overflow-x-auto">
+          <table className="w-full text-sm min-w-[600px]">
             <thead>
               <tr className="border-b border-gray-100 bg-gray-50">
                 <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Property</th>

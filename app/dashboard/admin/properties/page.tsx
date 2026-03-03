@@ -37,9 +37,9 @@ export default async function AdminPropertiesPage() {
     <div className="max-w-6xl mx-auto">
 
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between mb-6 sm:mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Properties</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Properties</h1>
           <p className="text-sm text-gray-500 mt-1">
             {allProperties.length} total propert{allProperties.length === 1 ? "y" : "ies"}
           </p>
@@ -53,8 +53,8 @@ export default async function AdminPropertiesPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-        <table className="w-full text-sm">
+      <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden overflow-x-auto">
+        <table className="w-full text-sm min-w-[640px]">
           <thead>
             <tr className="border-b border-gray-100 bg-gray-50">
               <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Property</th>
