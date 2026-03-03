@@ -70,7 +70,7 @@ export default function RequestToRentForm({ propertyId, propertyTitle, rentAmoun
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 p-6">
+    <div className="bg-white rounded-2xl border border-gray-100 p-4 sm:p-6">
       <h2 className="text-sm font-semibold text-gray-900 mb-1">
         Request to Rent
       </h2>
@@ -80,7 +80,6 @@ export default function RequestToRentForm({ propertyId, propertyTitle, rentAmoun
 
       <form onSubmit={handleSubmit} className="space-y-4">
 
-        {/* Move-in date */}
         <div>
           <label className="block text-xs font-medium text-gray-700 mb-1">
             Preferred Move-in Date
@@ -97,7 +96,6 @@ export default function RequestToRentForm({ propertyId, propertyTitle, rentAmoun
           />
         </div>
 
-        {/* Occupants */}
         <div>
           <label className="block text-xs font-medium text-gray-700 mb-1">
             Number of Occupants
@@ -115,7 +113,6 @@ export default function RequestToRentForm({ propertyId, propertyTitle, rentAmoun
           </select>
         </div>
 
-        {/* Employment info */}
         <div>
           <label className="block text-xs font-medium text-gray-700 mb-1">
             Employment / Income Info
@@ -131,7 +128,6 @@ export default function RequestToRentForm({ propertyId, propertyTitle, rentAmoun
           />
         </div>
 
-        {/* Message */}
         <div>
           <label className="block text-xs font-medium text-gray-700 mb-1">
             Message to Landlord{" "}
@@ -147,14 +143,12 @@ export default function RequestToRentForm({ propertyId, propertyTitle, rentAmoun
           />
         </div>
 
-        {/* Error */}
         {error && (
           <p className="text-sm text-red-500 bg-red-50 px-3 py-2 rounded-lg">
             {error}
           </p>
         )}
 
-        {/* Submit */}
         <button
           type="submit"
           disabled={loading}

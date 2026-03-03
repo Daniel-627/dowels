@@ -41,7 +41,6 @@ export default function PropertyImageUpload({ propertyId, onUploadComplete }: Pr
         continue;
       }
 
-      // Save URL to Neon
       const saveRes = await fetch("/api/properties/images", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -74,12 +73,11 @@ export default function PropertyImageUpload({ propertyId, onUploadComplete }: Pr
   return (
     <div className="space-y-4">
 
-      {/* Drop zone */}
       <div
         onDrop={handleDrop}
         onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
         onDragLeave={() => setDragOver(false)}
-        className={`border-2 border-dashed rounded-xl p-8 text-center transition ${
+        className={`border-2 border-dashed rounded-xl p-6 sm:p-8 text-center transition ${
           dragOver
             ? "border-gray-900 bg-gray-50"
             : "border-gray-200 hover:border-gray-300"
@@ -104,16 +102,14 @@ export default function PropertyImageUpload({ propertyId, onUploadComplete }: Pr
         </label>
       </div>
 
-      {/* Error */}
       {error && (
         <p className="text-sm text-red-500 bg-red-50 px-4 py-2.5 rounded-lg">
           {error}
         </p>
       )}
 
-      {/* Preview grid */}
       {images.length > 0 && (
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
           {images.map((img, i) => (
             <div key={i} className="relative aspect-video rounded-lg overflow-hidden bg-gray-100">
               <Image
