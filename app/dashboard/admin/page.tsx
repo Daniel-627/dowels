@@ -59,8 +59,8 @@ export default async function AdminOverviewPage() {
     <div className="max-w-6xl mx-auto">
 
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Overview</h1>
+      <div className="mb-6 sm:mb-8">
+       <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Overview</h1>
         <p className="text-sm text-gray-500 mt-1">
           Welcome back — here's what's happening on Dowels.
         </p>

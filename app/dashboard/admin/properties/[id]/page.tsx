@@ -52,14 +52,14 @@ export default async function PropertyDetailPage({
     <div className="max-w-3xl mx-auto">
 
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">{property.title}</h1>
+      <div className="mb-6 sm:mb-8">
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-900">{property.title}</h1>
         <p className="text-sm text-gray-500 mt-1">{property.location}</p>
       </div>
 
       {/* Details card */}
       <div className="bg-white rounded-2xl border border-gray-100 p-6 mb-6">
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 text-center">
           <div className="p-4 bg-gray-50 rounded-xl">
             <p className="text-xs text-gray-500">Rent</p>
             <p className="text-lg font-bold text-gray-900 mt-1">
@@ -99,7 +99,7 @@ export default async function PropertyDetailPage({
           <h2 className="text-sm font-semibold text-gray-900 mb-4">
             Property Images ({images.length})
           </h2>
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
             {images.map((img) => (
               <div key={img.id} className="relative aspect-video rounded-lg overflow-hidden bg-gray-100">
                 <Image
