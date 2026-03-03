@@ -386,7 +386,7 @@ export default function ReportsClient({ data }: Props) {
 
       {/* Balance Sheet — Primary Report */}
       <div className="bg-gray-900 rounded-2xl p-6 text-white">
-        <div className="flex items-start justify-between gap-6">
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 sm:gap-6">
           <div className="flex-1">
             <h2 className="text-lg font-bold mb-1">Balance Sheet</h2>
             <p className="text-sm text-gray-400 mb-6">
@@ -469,11 +469,11 @@ export default function ReportsClient({ data }: Props) {
           </div>
 
           {/* Export button */}
-          <div className="shrink-0">
+          <div className="shrink-0 sm:self-start">
             <button
               onClick={handleBalanceSheet}
               disabled={loading !== null}
-              className="px-5 py-2.5 bg-white text-gray-900 text-sm font-medium rounded-lg hover:bg-gray-100 transition disabled:opacity-50"
+              className="w-full sm:w-auto px-5 py-2.5 bg-white text-gray-900 text-sm font-medium rounded-lg hover:bg-gray-100 transition disabled:opacity-50"
             >
               {loading === "balance-pdf" ? "Generating..." : "Export PDF"}
             </button>
