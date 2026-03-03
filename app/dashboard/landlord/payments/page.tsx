@@ -47,9 +47,9 @@ export default async function LandlordPaymentsPage() {
     <div className="max-w-6xl mx-auto">
 
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Payments</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Payments</h1>
           <p className="text-sm text-gray-500 mt-1">
             {landlordPayments.length} payment{landlordPayments.length === 1 ? "" : "s"} recorded
           </p>
@@ -64,8 +64,8 @@ export default async function LandlordPaymentsPage() {
 
       {/* Table */}
       {landlordPayments.length > 0 ? (
-        <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-          <table className="w-full text-sm">
+        <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden overflow-x-auto">
+          <table className="w-full text-sm min-w-[580px]">
             <thead>
               <tr className="border-b border-gray-100 bg-gray-50">
                 <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Tenant</th>

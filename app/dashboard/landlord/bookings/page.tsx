@@ -85,7 +85,7 @@ export default async function LandlordBookingsPage() {
 
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Bookings</h1>
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Bookings</h1>
         <p className="text-sm text-gray-500 mt-1">
           {landlordBookings.length} total booking{landlordBookings.length === 1 ? "" : "s"}
         </p>
@@ -140,8 +140,8 @@ export default async function LandlordBookingsPage() {
           <h2 className="text-sm font-semibold text-gray-700 mb-4 uppercase tracking-wide">
             All Bookings
           </h2>
-          <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-            <table className="w-full text-sm">
+          <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden overflow-x-auto">
+            <table className="w-full text-sm min-w-[600px]">
               <thead>
                 <tr className="border-b border-gray-100 bg-gray-50">
                   <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Tenant</th>

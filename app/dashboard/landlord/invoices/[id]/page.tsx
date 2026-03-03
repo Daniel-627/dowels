@@ -87,7 +87,7 @@ export default async function InvoiceDetailPage({
         </Link>
         <div className="flex items-start justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
               {invoice.type.charAt(0) + invoice.type.slice(1).toLowerCase()} Invoice
               {invoice.period ? ` — ${invoice.period}` : ""}
             </h1>
@@ -102,7 +102,7 @@ export default async function InvoiceDetailPage({
       </div>
 
       {/* Summary */}
-      <div className="grid grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6">
         <div className="bg-white rounded-2xl border border-gray-100 p-4 text-center">
           <p className="text-xs text-gray-500">Invoice Amount</p>
           <p className="text-lg font-bold text-gray-900 mt-1">

@@ -44,9 +44,9 @@ export default async function LandlordPropertiesPage() {
     <div className="max-w-6xl mx-auto">
 
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">My Properties</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">My Properties</h1>
           <p className="text-sm text-gray-500 mt-1">
             {landlordProperties.length} propert{landlordProperties.length === 1 ? "y" : "ies"}
           </p>

@@ -54,15 +54,15 @@ export default async function LandlordExpensesPage() {
     <div className="max-w-6xl mx-auto">
 
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Expenses</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Expenses</h1>
           <p className="text-sm text-gray-500 mt-1">
             {landlordExpenses.length} expense{landlordExpenses.length === 1 ? "" : "s"} logged
           </p>
         </div>
-        <div className="flex items-center gap-4">
-          <div className="bg-red-50 text-red-700 rounded-2xl px-6 py-3 text-right">
+        <div className="flex items-center gap-3 sm:gap-4">
+          <div className="bg-red-50 text-red-700 rounded-2xl px-4 sm:px-6 py-3 text-right">
             <p className="text-xs text-red-400">Total Expenses</p>
             <p className="text-xl font-bold mt-0.5">
               KES {totalExpenses.toLocaleString()}
@@ -74,8 +74,8 @@ export default async function LandlordExpensesPage() {
 
       {/* Table */}
       {landlordExpenses.length > 0 ? (
-        <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-          <table className="w-full text-sm">
+        <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden overflow-x-auto">
+          <table className="w-full text-sm min-w-[560px]">
             <thead>
               <tr className="border-b border-gray-100 bg-gray-50">
                 <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Title</th>

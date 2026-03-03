@@ -44,7 +44,7 @@ export default async function LandlordPropertyDetailPage({
     <div className="max-w-3xl mx-auto">
 
       {/* Header */}
-      <div className="flex items-start justify-between mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-8">
         <div>
           <Link
             href="/dashboard/landlord/properties"
@@ -114,7 +114,7 @@ export default async function LandlordPropertyDetailPage({
           <h2 className="text-sm font-semibold text-gray-900 mb-4">
             Property Images ({images.length})
           </h2>
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
             {images.map((img) => (
               <div
                 key={img.id}
