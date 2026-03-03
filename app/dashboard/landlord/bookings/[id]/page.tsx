@@ -104,17 +104,21 @@ export default async function BookingDetailPage({
         >
           ← Back to Bookings
         </Link>
-        {booking.status === "ACTIVE" && (
-          <EndBookingButton bookingId={booking.id} />
-        )}
-        <h1 className="text-2xl font-bold text-gray-900">
-          {booking.propertyTitle}
-        </h1>
-        <p className="text-sm text-gray-500 mt-1">{booking.propertyLocation}</p>
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+          <div>
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
+              {booking.propertyTitle}
+            </h1>
+            <p className="text-sm text-gray-500 mt-1">{booking.propertyLocation}</p>
+          </div>
+          {booking.status === "ACTIVE" && (
+            <EndBookingButton bookingId={booking.id} />
+          )}
+        </div>
       </div>
 
       {/* Summary cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-6">
         <div className="bg-white rounded-2xl border border-gray-100 p-4 text-center">
           <p className="text-xs text-gray-500">Monthly Rent</p>
           <p className="text-lg font-bold text-gray-900 mt-1">
@@ -195,7 +199,7 @@ export default async function BookingDetailPage({
       </div>
 
       {/* Invoices */}
-      <div className="bg-white rounded-2xl border border-gray-100 p-6 mb-6">
+      <div className="bg-white rounded-2xl border border-gray-100 p-4 sm:p-6 mb-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-sm font-semibold text-gray-900">
             Invoices ({bookingInvoices.length})
@@ -245,7 +249,7 @@ export default async function BookingDetailPage({
       </div>
 
       {/* Payments */}
-      <div className="bg-white rounded-2xl border border-gray-100 p-6">
+      <div className="bg-white rounded-2xl border border-gray-100 p-4 sm:p-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-sm font-semibold text-gray-900">
             Payments ({bookingPayments.length})
