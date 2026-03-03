@@ -148,7 +148,7 @@ export default function PLStatement() {
     <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
 
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-4 sm:px-6 py-4 sm:py-5 border-b border-gray-100">
         <div>
           <h2 className="text-sm font-bold text-gray-900">
             Profit & Loss Statement
