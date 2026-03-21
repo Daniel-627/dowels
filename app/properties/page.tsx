@@ -56,10 +56,11 @@ async function getProperties(search: string, page: number) {
 export default async function PropertiesPage({
   searchParams,
 }: {
-  searchParams: { q?: string; page?: string };
+  searchParams: Promise<{ q?: string; page?: string }>;
 }) {
-  const search = searchParams.q ?? "";
-  const page = Math.max(1, parseInt(searchParams.page ?? "1"));
+  const { q, page: pageParam } = await searchParams;
+  const search = q ?? "";
+  const page = Math.max(1, parseInt(pageParam ?? "1"));
 
   const { properties: props, total, totalPages } = await getProperties(search, page);
 

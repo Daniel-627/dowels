@@ -18,18 +18,23 @@ export default function PropertyCard({ property, firstImage }: PropertyCardProps
     <div className="group rounded-2xl border border-gray-100 bg-white overflow-hidden hover:shadow-md transition flex flex-col">
 
       {/* Image */}
-      <div className="relative h-48 w-full bg-gray-100">
-        <Image
-          src={firstImage ?? "/placeholder-property.jpg"}
-          alt={property.title}
-          fill
-          className="object-cover group-hover:scale-105 transition duration-300"
-        />
-        {/* Status badge */}
-        <span className={`absolute top-3 right-3 text-xs font-medium px-2.5 py-1 rounded-full ${statusColors[property.status]}`}>
-          {property.status.charAt(0) + property.status.slice(1).toLowerCase()}
-        </span>
-      </div>
+<div className="relative h-48 w-full bg-gray-100">
+  {firstImage ? (
+    <Image
+      src={firstImage}
+      alt={property.title}
+      fill
+      className="object-cover group-hover:scale-105 transition duration-300"
+    />
+  ) : (
+    <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+      <span className="text-3xl">🏠</span>
+    </div>
+  )}
+  <span className={`absolute top-3 right-3 text-xs font-medium px-2.5 py-1 rounded-full ${statusColors[property.status]}`}>
+    {property.status.charAt(0) + property.status.slice(1).toLowerCase()}
+  </span>
+</div>
 
       {/* Content */}
       <div className="p-5 flex flex-col flex-1">

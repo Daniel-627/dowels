@@ -19,7 +19,7 @@ export default function AboutPage() {
         </p>
         <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4">
           <Link
-            href="/#properties"
+            href="/properties"
             className="inline-flex items-center justify-center px-6 py-3 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-700 transition"
           >
             Browse Properties

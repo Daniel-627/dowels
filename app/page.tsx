@@ -90,7 +90,7 @@ export default async function HomePage() {
 
             <div className="mt-8 flex flex-col sm:flex-row gap-3">
               <a
-                href="#properties"
+                href="/properties"
                 className="inline-flex items-center justify-center px-6 py-3 bg-white text-gray-900 font-semibold rounded-xl hover:bg-gray-100 transition text-sm shadow-lg"
               >
                 {content?.heroCtaText ?? "Browse Properties"}
