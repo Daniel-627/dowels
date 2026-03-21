@@ -12,9 +12,9 @@ export const metadata: Metadata = {
   title: "Dowels — Rental Management",
   description: "A smarter way to manage rentals by Dorcas Owela",
   icons: {
-    icon: "/icon.svg",
-    shortcut: "/icon.svg",
-    apple: "/icon.svg",
+    icon: "/dowels_icon_only.svg",
+    shortcut: "/dowels_icon_only.svg",
+    apple: "/dowels_icon_only.svg",
   },
 };
 
