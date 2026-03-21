@@ -10,7 +10,12 @@ const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"]
 
 export const metadata: Metadata = {
   title: "Dowels — Rental Management",
-  description: "A smarter way to manage rentals by OpenDoor",
+  description: "A smarter way to manage rentals by Dorcas Owela",
+  icons: {
+    icon: "/icon.svg",
+    shortcut: "/icon.svg",
+    apple: "/icon.svg",
+  },
 };
 
 export default function RootLayout({
