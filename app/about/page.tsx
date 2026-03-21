@@ -68,7 +68,7 @@ export default function AboutPage() {
             Our Company
           </p>
           <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">
-            A product of OpenDoor
+            A product of Dorcas Owela
           </h2>
           <p className="text-sm text-gray-500 leading-relaxed">
             Dowels is built and maintained by OpenDoor, a company focused on
