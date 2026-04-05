@@ -71,10 +71,7 @@ export default function AboutPage() {
             A product of Dorcas Owela
           </h2>
           <p className="text-sm text-gray-500 leading-relaxed">
-            Dowels is built and maintained by OpenDoor, a company focused on
-            creating practical software solutions for the African real estate
-            market. We believe property management should be accessible,
-            affordable and straightforward for everyone.
+            This project was developed by DORCAS OWELA. (Reg. No. 2025CS163626) as a partial fulfilment of the requirements for the award of a Diploma in Technical Trainer Education — Computer Studies, under the supervision of Alice Kemunto Ogoro. Submitted December 2025, CSCS-A.
           </p>
         </div>
         <div className="bg-gray-900 rounded-2xl p-6 sm:p-8 text-white">
@@ -95,8 +92,8 @@ export default function AboutPage() {
               <span className="font-semibold">KES</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-300">Company</span>
-              <span className="font-semibold">OpenDoor</span>
+              <span className="text-sm text-gray-300">Owner</span>
+              <span className="font-semibold">Dorcas Owela</span>
             </div>
           </div>
         </div>

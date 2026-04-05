@@ -10,6 +10,7 @@ const navItems = [
   { label: "Properties", href: "/dashboard/landlord/properties", icon: "🏠" },
   { label: "Requests", href: "/dashboard/landlord/requests", icon: "📋" },
   { label: "Bookings", href: "/dashboard/landlord/bookings", icon: "📅" },
+  { label: "Tenants", href: "/dashboard/landlord/tenants", icon: "👤" },
   { label: "Invoices", href: "/dashboard/landlord/invoices", icon: "🧾" },
   { label: "Payments", href: "/dashboard/landlord/payments", icon: "💳" },
   { label: "Expenses", href: "/dashboard/landlord/expenses", icon: "💸" },

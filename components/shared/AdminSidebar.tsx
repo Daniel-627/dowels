@@ -11,8 +11,6 @@ const navItems = [
   { label: "Users", href: "/dashboard/admin/users", icon: "👥" },
   { label: "Tenants", href: "/dashboard/admin/tenants", icon: "👤" },
   { label: "Requests", href: "/dashboard/admin/requests", icon: "📋" },
-  { label: "Invoices", href: "/dashboard/admin/invoices", icon: "🧾" },
-  { label: "Expenses", href: "/dashboard/admin/expenses", icon: "💸" },
   { label: "Reports", href: "/dashboard/admin/reports", icon: "📊" },
   { label: "Settings", href: "/dashboard/admin/settings", icon: "⚙️" },
 ];
