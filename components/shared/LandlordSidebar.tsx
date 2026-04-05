@@ -15,6 +15,7 @@ const navItems = [
   { label: "Payments", href: "/dashboard/landlord/payments", icon: "💳" },
   { label: "Expenses", href: "/dashboard/landlord/expenses", icon: "💸" },
   { label: "Reports", href: "/dashboard/landlord/reports", icon: "📊" },
+  { label: "Settings", href: "/dashboard/landlord/settings", icon: "⚙️" }, 
 ];
 
 export default function LandlordSidebar() {

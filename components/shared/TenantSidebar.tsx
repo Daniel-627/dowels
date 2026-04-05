@@ -9,6 +9,7 @@ const navItems = [
   { label: "Overview", href: "/dashboard/tenant", icon: "▦" },
   { label: "My Requests", href: "/dashboard/tenant/requests", icon: "📋" },
   { label: "My Invoices", href: "/dashboard/tenant/invoices", icon: "🧾" },
+  { label: "Settings", href: "/dashboard/tenant/settings", icon: "⚙️" },
 ];
 
 export default function TenantSidebar() {
