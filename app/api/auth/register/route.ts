@@ -4,6 +4,7 @@ import { users } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
+import { sendWelcomeEmail } from "@/lib/email";
 
 const registerSchema = z.object({
   name: z.string().min(2),
@@ -26,7 +27,6 @@ export async function POST(req: NextRequest) {
 
     const { name, email, phone, password } = parsed.data;
 
-    // Check if email already exists
     const existing = await db
       .select()
       .from(users)
@@ -47,9 +47,11 @@ export async function POST(req: NextRequest) {
       email,
       phone: phone ?? null,
       passwordHash,
-      role: "TENANT",   // always default to tenant
+      role: "TENANT",
       isActive: true,
     });
+
+    await sendWelcomeEmail({ to: email, name }).catch(console.error);
 
     return NextResponse.json({ success: true }, { status: 201 });
 

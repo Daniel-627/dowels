@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { payments, invoices } from "@/lib/db/schema";
+import { payments, invoices, bookings, properties, users } from "@/lib/db/schema";
 import { auth } from "@/lib/auth";
 import { eq, sum } from "drizzle-orm";
 import { z } from "zod";
 import { recordPaymentJournal } from "@/lib/accounting";
+import { sendPaymentConfirmationEmail } from "@/lib/email";
 
 const schema = z.object({
   invoiceId: z.string().uuid(),
@@ -31,16 +32,28 @@ export async function POST(req: NextRequest) {
       }, { status: 400 });
     }
 
-    // Get invoice
+    // Get invoice with tenant and property details
     const invoice = await db
-      .select()
+      .select({
+        id: invoices.id,
+        amount: invoices.amount,
+        type: invoices.type,
+        tenantName: users.name,
+        tenantEmail: users.email,
+        propertyTitle: properties.title,
+      })
       .from(invoices)
+      .leftJoin(bookings, eq(invoices.bookingId, bookings.id))
+      .leftJoin(users, eq(bookings.tenantId, users.id))
+      .leftJoin(properties, eq(bookings.propertyId, properties.id))
       .where(eq(invoices.id, parsed.data.invoiceId))
       .limit(1);
 
     if (!invoice[0]) {
       return NextResponse.json({ success: false, error: "Invoice not found" }, { status: 404 });
     }
+
+    const { tenantName, tenantEmail, propertyTitle } = invoice[0];
 
     // Record payment
     const payment = await db
@@ -51,21 +64,18 @@ export async function POST(req: NextRequest) {
         method: parsed.data.method,
         paidAt: new Date(parsed.data.paidAt),
         recordedBy: session.user.id,
-        
       })
       .returning();
 
-    
+    // Journal entry
+    await recordPaymentJournal({
+      amount: parsed.data.amount,
+      invoiceType: invoice[0].type as "RENT" | "UTILITY" | "OTHER",
+      createdBy: session.user.id,
+      description: `Payment recorded for invoice ${parsed.data.invoiceId}`,
+    });
 
-      // After recording the payment.
-      await recordPaymentJournal({
-        amount: parsed.data.amount,
-        invoiceType: invoice[0].type as "RENT" | "UTILITY" | "OTHER",
-        createdBy: session.user.id,
-        description: `Payment recorded for invoice ${parsed.data.invoiceId}`,
-      });
-
-    // Calculate total paid so far
+    // Calculate total paid
     const totalPaidResult = await db
       .select({ total: sum(payments.amount) })
       .from(payments)
@@ -86,6 +96,18 @@ export async function POST(req: NextRequest) {
       .update(invoices)
       .set({ status: newStatus })
       .where(eq(invoices.id, parsed.data.invoiceId));
+
+    // Send confirmation email to tenant
+    if (tenantEmail && tenantName && propertyTitle) {
+      await sendPaymentConfirmationEmail({
+        to: tenantEmail,
+        tenantName,
+        propertyTitle,
+        amount: parsed.data.amount,
+        method: parsed.data.method,
+        paidAt: parsed.data.paidAt,
+      }).catch(console.error);
+    }
 
     return NextResponse.json({ success: true, data: payment[0] }, { status: 201 });
 
