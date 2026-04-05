@@ -1,9 +1,9 @@
 import { db } from "@/lib/db";
-import { invoices, bookings, properties, payments } from "@/lib/db/schema";
+import { invoices, bookings, properties } from "@/lib/db/schema";
 import { eq, and } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import Link from "next/link";
+import DownloadReceiptButton from "@/components/shared/DownloadReceiptButton";
 
 async function getTenantInvoices(tenantId: string) {
   const tenantInvoices = await db
@@ -78,7 +78,7 @@ export default async function TenantInvoicesPage() {
       {/* Invoices */}
       {tenantInvoices.length > 0 ? (
         <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden overflow-x-auto">
-          <table className="w-full text-sm min-w-[600px]">
+          <table className="w-full text-sm min-w-[650px]">
             <thead>
               <tr className="border-b border-gray-100 bg-gray-50">
                 <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Property</th>
@@ -87,6 +87,7 @@ export default async function TenantInvoicesPage() {
                 <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Due Date</th>
                 <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Amount</th>
                 <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Status</th>
+                <th className="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wide">Receipt</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
@@ -114,6 +115,20 @@ export default async function TenantInvoicesPage() {
                     <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${statusStyles[inv.status]}`}>
                       {inv.status.charAt(0) + inv.status.slice(1).toLowerCase().replace("_", " ")}
                     </span>
+                  </td>
+                  <td className="px-6 py-4">
+                    <DownloadReceiptButton
+                      invoiceId={inv.id}
+                      invoiceType={inv.type}
+                      invoicePeriod={inv.period}
+                      invoiceAmount={Number(inv.amount)}
+                      invoiceStatus={inv.status}
+                      dueDate={inv.dueDate}
+                      propertyTitle={inv.propertyTitle}
+                      propertyLocation={inv.propertyLocation}
+                      tenantName={session.user.name ?? ""}
+                      tenantEmail={session.user.email ?? ""}
+                    />
                   </td>
                 </tr>
               ))}

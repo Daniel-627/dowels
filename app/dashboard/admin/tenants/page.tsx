@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
-import { users, bookings, properties, rentalRequests } from "@/lib/db/schema";
-import { eq, and, count, alias } from "drizzle-orm";
+import { users, bookings, properties } from "@/lib/db/schema";
+import { eq } from "drizzle-orm";
+import { alias } from "drizzle-orm/pg-core";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 
@@ -13,7 +14,6 @@ async function getActiveTenants() {
       tenantName: users.name,
       tenantEmail: users.email,
       tenantPhone: users.phone,
-      joinedAt: users.createdAt,
       propertyTitle: properties.title,
       propertyLocation: properties.location,
       bookingId: bookings.id,
@@ -39,7 +39,6 @@ export default async function AdminTenantsPage() {
   return (
     <div className="max-w-6xl mx-auto">
 
-      {/* Header */}
       <div className="mb-8">
         <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Active Tenants</h1>
         <p className="text-sm text-gray-500 mt-1">
