@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 const navItems = [
   { label: "Overview", href: "/dashboard/landlord", icon: "▦" },
   { label: "Properties", href: "/dashboard/landlord/properties", icon: "🏠" },
+  { label: "Maintenance", href: "/dashboard/landlord/maintenance", icon: "🔧" },
   { label: "Requests", href: "/dashboard/landlord/requests", icon: "📋" },
   { label: "Bookings", href: "/dashboard/landlord/bookings", icon: "📅" },
   { label: "Tenants", href: "/dashboard/landlord/tenants", icon: "👤" },
@@ -16,7 +17,6 @@ const navItems = [
   { label: "Expenses", href: "/dashboard/landlord/expenses", icon: "💸" },
   { label: "Reports", href: "/dashboard/landlord/reports", icon: "📊" },
   { label: "Settings", href: "/dashboard/landlord/settings", icon: "⚙️" }, 
-  { label: "Maintenance", href: "/dashboard/landlord/maintenance", icon: "🔧" },
 ];
 
 export default function LandlordSidebar() {
