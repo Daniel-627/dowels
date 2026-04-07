@@ -3,36 +3,15 @@ import PropertyCardCompact from "@/components/shared/PropertyCardCompact";
 import Link from "next/link";
 import { eq, and, notInArray, sql, ilike, or } from "drizzle-orm";
 import { properties, propertyImages, rentalRequests } from "@/lib/db/schema";
+import { getAvailablePropertyIds, attachImages, buildAvailableCondition } from "@/lib/queries/properties";
 
 const PER_PAGE = 20;
 
 
 async function getProperties(search: string, page: number) {
   const offset = (page - 1) * PER_PAGE;
-
-  // Get property IDs with pending requests
-  const pendingPropertyIds = await db
-    .selectDistinct({ propertyId: rentalRequests.propertyId })
-    .from(rentalRequests)
-    .where(eq(rentalRequests.status, "PENDING"));
-
-  const excludeIds = pendingPropertyIds.map((r) => r.propertyId);
-
-  const conditions = and(
-    eq(properties.isPublished, true),
-    eq(properties.status, "AVAILABLE"),
-    excludeIds.length > 0
-      ? notInArray(properties.id, excludeIds)
-      : sql`true`,
-    ...(search
-      ? [
-          or(
-            ilike(properties.title, `%${search}%`),
-            ilike(properties.location, `%${search}%`)
-          ),
-        ]
-      : [])
-  );
+  const excludeIds = await getAvailablePropertyIds();
+  const conditions = buildAvailableCondition(excludeIds, search);
 
   const [props, countResult] = await Promise.all([
     db
@@ -50,17 +29,7 @@ async function getProperties(search: string, page: number) {
 
   const total = Number(countResult[0]?.count ?? 0);
   const totalPages = Math.ceil(total / PER_PAGE);
-
-  const withImages = await Promise.all(
-    props.map(async (p) => {
-      const images = await db
-        .select()
-        .from(propertyImages)
-        .where(eq(propertyImages.propertyId, p.id))
-        .limit(1);
-      return { ...p, firstImage: images[0]?.url ?? null };
-    })
-  );
+  const withImages = await attachImages(props);
 
   return { properties: withImages, total, totalPages, page };
 }

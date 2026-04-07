@@ -1,12 +1,13 @@
 import { client } from "@/sanity/lib/client";
 import { urlFor } from "@/sanity/lib/image";
-import { db } from "@/lib/db";
-import { properties, propertyImages } from "@/lib/db/schema";
 import Image from "next/image";
 import Link from "next/link";
 import PropertyCard from "@/components/shared/PropertyCard";
 import { eq, and, notInArray, sql } from "drizzle-orm";
 import { rentalRequests } from "@/lib/db/schema";
+import { getAvailablePropertyIds, attachImages, buildAvailableCondition } from "@/lib/queries/properties";
+import { db } from "@/lib/db";
+import { properties } from "@/lib/db/schema";
 
 async function getHomePage() {
   return await client.fetch(`
@@ -20,41 +21,18 @@ async function getHomePage() {
 }
 
 
-async function getAvailableProperties() {
-  // Get property IDs that have any pending request
-  const pendingPropertyIds = await db
-    .selectDistinct({ propertyId: rentalRequests.propertyId })
-    .from(rentalRequests)
-    .where(eq(rentalRequests.status, "PENDING"));
 
-  const excludeIds = pendingPropertyIds.map((r) => r.propertyId);
+async function getAvailableProperties() {
+  const excludeIds = await getAvailablePropertyIds();
+  const condition = buildAvailableCondition(excludeIds);
 
   const props = await db
     .select()
     .from(properties)
-    .where(
-      and(
-        eq(properties.isPublished, true),
-        eq(properties.status, "AVAILABLE"),
-        excludeIds.length > 0
-          ? notInArray(properties.id, excludeIds)
-          : sql`true`
-      )
-    )
+    .where(condition)
     .limit(12);
 
-  const withImages = await Promise.all(
-    props.map(async (p) => {
-      const images = await db
-        .select()
-        .from(propertyImages)
-        .where(eq(propertyImages.propertyId, p.id))
-        .limit(1);
-      return { ...p, firstImage: images[0]?.url ?? null };
-    })
-  );
-
-  return withImages;
+  return attachImages(props);
 }
 
 export default async function HomePage() {
