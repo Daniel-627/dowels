@@ -6,6 +6,8 @@ import Image from "next/image";
 import { auth } from "@/lib/auth";
 import RequestToRentForm from "@/components/forms/RequestToRentForm";
 
+export const dynamic = "force-dynamic";
+
 async function getProperty(id: string) {
   const result = await db
     .select({
@@ -46,8 +48,21 @@ async function getExistingRequest(propertyId: string, tenantId: string) {
       )
     )
     .limit(1);
-
   return result[0] ?? null;
+}
+
+async function hasPendingRequest(propertyId: string) {
+  const result = await db
+    .select({ id: rentalRequests.id })
+    .from(rentalRequests)
+    .where(
+      and(
+        eq(rentalRequests.propertyId, propertyId),
+        eq(rentalRequests.status, "PENDING")
+      )
+    )
+    .limit(1);
+  return result.length > 0;
 }
 
 const statusStyles: Record<string, string> = {
@@ -79,11 +94,18 @@ export default async function PropertyDetailPage({
 
   if (!property) notFound();
 
-  // Check for existing request if logged in as tenant
-  const existingRequest =
+  const [existingRequest, pendingExists] = await Promise.all([
     session?.user?.role === "TENANT"
-      ? await getExistingRequest(id, session.user.id)
-      : null;
+      ? getExistingRequest(id, session.user.id)
+      : Promise.resolve(null),
+    hasPendingRequest(id),
+  ]);
+
+  // Property is effectively unavailable if it has a pending request
+  // (unless the current tenant is the one who made that request)
+  const isEffectivelyAvailable =
+    property.status === "AVAILABLE" &&
+    (!pendingExists || (existingRequest?.status === "PENDING"));
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
@@ -94,18 +116,22 @@ export default async function PropertyDetailPage({
 
           {/* Image gallery */}
           <div className="space-y-3">
-            {/* Main image */}
             <div className="relative w-full h-72 sm:h-96 rounded-2xl overflow-hidden bg-gray-100">
-              <Image
-                src={images[0]?.url ?? "/placeholder-property.jpg"}
-                alt={property.title}
-                fill
-                className="object-cover"
-                priority
-              />
+              {images[0] ? (
+                <Image
+                  src={images[0].url}
+                  alt={property.title}
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              ) : (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="text-4xl">🏠</span>
+                </div>
+              )}
             </div>
 
-            {/* Thumbnails */}
             {images.length > 1 && (
               <div className="grid grid-cols-4 gap-2">
                 {images.slice(1).map((img) => (
@@ -141,11 +167,11 @@ export default async function PropertyDetailPage({
                 </p>
               </div>
               <span className={`text-xs font-medium px-2.5 py-1 rounded-full shrink-0 ${
-                property.status === "AVAILABLE"
+                isEffectivelyAvailable
                   ? "bg-green-100 text-green-700"
                   : "bg-red-100 text-red-700"
               }`}>
-                {property.status.charAt(0) + property.status.slice(1).toLowerCase()}
+                {isEffectivelyAvailable ? "Available" : "Unavailable"}
               </span>
             </div>
 
@@ -182,14 +208,29 @@ export default async function PropertyDetailPage({
                 </p>
               </div>
             )}
+
+            {/* Landlord */}
+            {property.landlordName && (
+              <div className="mt-6 pt-6 border-t border-gray-50 flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-gray-900 flex items-center justify-center text-white text-xs font-bold shrink-0">
+                  {property.landlordName.charAt(0).toUpperCase()}
+                </div>
+                <div>
+                  <p className="text-xs text-gray-400">Listed by</p>
+                  <p className="text-sm font-medium text-gray-900">
+                    {property.landlordName}
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
-        {/* ── Right: Request Form ─────────────────────────────────────── */}
+        {/* ── Right: Request Panel ────────────────────────────────────── */}
         <div className="lg:col-span-1">
-          <div className="sticky top-24">
+          <div className="sticky top-24 space-y-4">
 
-            {/* Already requested */}
+            {/* Tenant has existing request */}
             {existingRequest && (
               <div className="bg-white rounded-2xl border border-gray-100 p-6">
                 <h2 className="text-sm font-semibold text-gray-900 mb-4">
@@ -203,16 +244,14 @@ export default async function PropertyDetailPage({
                 </p>
                 <p className="mt-4 text-xs text-gray-400">
                   Submitted {new Date(existingRequest.createdAt).toLocaleDateString("en-KE", {
-                    day: "numeric",
-                    month: "short",
-                    year: "numeric",
+                    day: "numeric", month: "short", year: "numeric",
                   })}
                 </p>
               </div>
             )}
 
             {/* Not logged in */}
-            {!session && property.status === "AVAILABLE" && (
+            {!session && isEffectivelyAvailable && (
               <div className="bg-white rounded-2xl border border-gray-100 p-6 text-center">
                 <p className="text-2xl mb-3">🏠</p>
                 <h2 className="text-sm font-semibold text-gray-900">
@@ -236,8 +275,8 @@ export default async function PropertyDetailPage({
               </div>
             )}
 
-            {/* Logged in as tenant, no existing request */}
-            {session?.user?.role === "TENANT" && !existingRequest && property.status === "AVAILABLE" && (
+            {/* Tenant — no existing request, property available */}
+            {session?.user?.role === "TENANT" && !existingRequest && isEffectivelyAvailable && (
               <RequestToRentForm
                 propertyId={property.id}
                 propertyTitle={property.title}
@@ -245,16 +284,29 @@ export default async function PropertyDetailPage({
               />
             )}
 
-            {/* Logged in as landlord or admin */}
-            {session && ["LANDLORD", "ADMIN"].includes(session.user.role) && (
+            {/* Property has pending request from someone else */}
+            {session?.user?.role === "TENANT" && !existingRequest && !isEffectivelyAvailable && (
               <div className="bg-white rounded-2xl border border-gray-100 p-6 text-center">
-                <p className="text-xs text-gray-400">
-                  You are viewing this as {session.user.role.toLowerCase()}.
+                <p className="text-2xl mb-3">⏳</p>
+                <h2 className="text-sm font-semibold text-gray-900">
+                  Under Review
+                </h2>
+                <p className="text-xs text-gray-500 mt-2">
+                  This property is currently under review by the landlord.
                 </p>
               </div>
             )}
 
-            {/* Property not available */}
+            {/* Landlord or admin view */}
+            {session && ["LANDLORD", "ADMIN"].includes(session.user.role) && (
+              <div className="bg-white rounded-2xl border border-gray-100 p-6 text-center">
+                <p className="text-xs text-gray-400">
+                  Viewing as {session.user.role.toLowerCase()}.
+                </p>
+              </div>
+            )}
+
+            {/* Property not available at all */}
             {property.status !== "AVAILABLE" && (
               <div className="bg-white rounded-2xl border border-gray-100 p-6 text-center">
                 <p className="text-2xl mb-3">🚫</p>
@@ -266,7 +318,6 @@ export default async function PropertyDetailPage({
                 </p>
               </div>
             )}
-
           </div>
         </div>
       </div>
