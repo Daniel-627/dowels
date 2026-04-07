@@ -4,6 +4,7 @@ import { useState, Suspense } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { z } from "zod";
+import Link from "next/link";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -104,6 +105,15 @@ function LoginForm() {
                 {error}
               </p>
             )}
+
+            <div className="flex justify-end">
+  <Link
+    href="/forgot-password"
+    className="text-xs text-gray-500 hover:text-gray-900 transition"
+  >
+    Forgot password?
+  </Link>
+</div>
 
             <button
               type="submit"

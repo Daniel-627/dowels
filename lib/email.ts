@@ -298,3 +298,40 @@ export async function sendMaintenanceRequestEmail({
     `,
   });
 }
+
+export async function sendPasswordResetEmail({
+  to,
+  code,
+}: {
+  to: string;
+  code: string;
+}) {
+  return resend.emails.send({
+    from: FROM,
+    to,
+    subject: "Your Dowels password reset code",
+    html: `
+      <div style="font-family: sans-serif; max-width: 560px; margin: 0 auto; padding: 32px 24px; color: #111827;">
+        <div style="margin-bottom: 32px;">
+          <h1 style="font-size: 24px; font-weight: 700; color: #111827; margin: 0;">Dowels</h1>
+          <p style="font-size: 12px; color: #9ca3af; margin: 4px 0 0;">by Dorcas Owela</p>
+        </div>
+        <h2 style="font-size: 20px; font-weight: 600; margin: 0 0 12px;">Password Reset</h2>
+        <p style="font-size: 14px; color: #4b5563; line-height: 1.7; margin: 0 0 24px;">
+          Use the code below to reset your password. It expires in 15 minutes.
+        </p>
+        <div style="background: #f9fafb; border: 2px dashed #e5e7eb; border-radius: 12px; padding: 24px; text-align: center; margin-bottom: 24px;">
+          <p style="font-size: 40px; font-weight: 700; letter-spacing: 8px; color: #111827; margin: 0;">
+            ${code}
+          </p>
+        </div>
+        <p style="font-size: 13px; color: #9ca3af; margin: 0 0 24px;">
+          If you did not request a password reset, ignore this email. Your password will not change.
+        </p>
+        <p style="font-size: 12px; color: #9ca3af; margin: 32px 0 0;">
+          © ${new Date().getFullYear()} OpenDoor. All rights reserved.
+        </p>
+      </div>
+    `,
+  });
+}

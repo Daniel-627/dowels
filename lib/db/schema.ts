@@ -161,3 +161,12 @@ export const maintenanceRequests = pgTable("maintenance_requests", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
   resolvedAt: timestamp("resolved_at"),
 });
+
+export const passwordResetTokens = pgTable("password_reset_tokens", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  email: varchar("email", { length: 255 }).notNull(),
+  code: varchar("code", { length: 6 }).notNull(),
+  expiresAt: timestamp("expires_at").notNull(),
+  used: boolean("used").notNull().default(false),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
