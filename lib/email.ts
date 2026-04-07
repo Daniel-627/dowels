@@ -233,3 +233,68 @@ export async function sendPaymentConfirmationEmail({
     `,
   });
 }
+
+export async function sendMaintenanceRequestEmail({
+  to,
+  landlordName,
+  tenantName,
+  propertyTitle,
+  title,
+  description,
+  priority,
+}: {
+  to: string;
+  landlordName: string;
+  tenantName: string;
+  propertyTitle: string;
+  title: string;
+  description: string;
+  priority: string;
+}) {
+  const priorityColors: Record<string, string> = {
+    LOW: "#6b7280",
+    MEDIUM: "#d97706",
+    HIGH: "#dc2626",
+    URGENT: "#7c3aed",
+  };
+
+  return resend.emails.send({
+    from: FROM,
+    to,
+    subject: `Maintenance Request — ${title} at ${propertyTitle}`,
+    html: `
+      <div style="font-family: sans-serif; max-width: 560px; margin: 0 auto; padding: 32px 24px; color: #111827;">
+        <div style="margin-bottom: 32px;">
+          <h1 style="font-size: 24px; font-weight: 700; color: #111827; margin: 0;">Dowels</h1>
+          <p style="font-size: 12px; color: #9ca3af; margin: 4px 0 0;">by Dorcas Owela</p>
+        </div>
+        <h2 style="font-size: 20px; font-weight: 600; margin: 0 0 12px;">New Maintenance Request</h2>
+        <p style="font-size: 14px; color: #4b5563; line-height: 1.7; margin: 0 0 24px;">
+          Hi ${landlordName}, <strong>${tenantName}</strong> has submitted a maintenance request
+          for <strong>${propertyTitle}</strong>.
+        </p>
+        <div style="background: #f9fafb; border-radius: 12px; padding: 16px; margin-bottom: 24px;">
+          <p style="font-size: 13px; color: #6b7280; margin: 0 0 8px;">
+            <strong>Title:</strong> ${title}
+          </p>
+          <p style="font-size: 13px; color: #6b7280; margin: 0 0 8px;">
+            <strong>Priority:</strong>
+            <span style="color: ${priorityColors[priority] ?? "#6b7280"}; font-weight: 600;">
+              ${priority}
+            </span>
+          </p>
+          <p style="font-size: 13px; color: #6b7280; margin: 0;">
+            <strong>Description:</strong> ${description}
+          </p>
+        </div>
+        <a href="${process.env.NEXTAUTH_URL}/dashboard/landlord/maintenance"
+           style="display: inline-block; background: #111827; color: #fff; padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 500; text-decoration: none;">
+          View Request
+        </a>
+        <p style="font-size: 12px; color: #9ca3af; margin: 32px 0 0;">
+          © ${new Date().getFullYear()} OpenDoor. All rights reserved.
+        </p>
+      </div>
+    `,
+  });
+}

@@ -10,6 +10,7 @@ const navItems = [
   { label: "My Requests", href: "/dashboard/tenant/requests", icon: "📋" },
   { label: "My Invoices", href: "/dashboard/tenant/invoices", icon: "🧾" },
   { label: "Settings", href: "/dashboard/tenant/settings", icon: "⚙️" },
+  { label: "Maintenance", href: "/dashboard/tenant/maintenance", icon: "🔧" },
 ];
 
 export default function TenantSidebar() {

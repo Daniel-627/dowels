@@ -12,6 +12,9 @@ export const invoiceStatusEnum = pgEnum("invoice_status", ["UNPAID", "PARTIALLY_
 export const paymentMethodEnum = pgEnum("payment_method", ["CASH", "BANK_TRANSFER", "MPESA", "OTHER"]);
 export const expenseCategoryEnum = pgEnum("expense_category", ["MAINTENANCE", "UTILITIES", "INSURANCE", "OTHER"]);
 export const rentalRequestStatusEnum = pgEnum("rental_request_status", ["PENDING", "APPROVED", "REJECTED", "CANCELLED"]);
+export const maintenancePriorityEnum = pgEnum("maintenance_priority", ["LOW", "MEDIUM", "HIGH", "URGENT"]);
+export const maintenanceStatusEnum = pgEnum("maintenance_status", ["OPEN", "IN_PROGRESS", "RESOLVED"]);
+
 
 
 // ─── Phase 2 Enums (commented out until Phase 2) ─────────────────────────────
@@ -143,4 +146,18 @@ export const accounts = pgTable("accounts", {
    accountId: uuid("account_id").notNull().references(() => accounts.id),
    debit: decimal("debit", { precision: 12, scale: 2 }).notNull().default("0"),
    credit: decimal("credit", { precision: 12, scale: 2 }).notNull().default("0"),
+});
+
+
+
+export const maintenanceRequests = pgTable("maintenance_requests", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  bookingId: uuid("booking_id").notNull().references(() => bookings.id),
+  tenantId: uuid("tenant_id").notNull().references(() => users.id),
+  title: varchar("title", { length: 255 }).notNull(),
+  description: text("description").notNull(),
+  priority: maintenancePriorityEnum("priority").notNull().default("MEDIUM"),
+  status: maintenanceStatusEnum("status").notNull().default("OPEN"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  resolvedAt: timestamp("resolved_at"),
 });
