@@ -1,5 +1,7 @@
 import LandlordSidebar from "@/components/shared/LandlordSidebar";
 
+export const dynamic = "force-dynamic";
+
 export default function LandlordLayout({
   children,
 }: {

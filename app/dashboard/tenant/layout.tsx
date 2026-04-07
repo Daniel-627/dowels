@@ -1,5 +1,7 @@
 import TenantSidebar from "@/components/shared/TenantSidebar";
 
+export const dynamic = "force-dynamic";
+
 export default function TenantLayout({
   children,
 }: {

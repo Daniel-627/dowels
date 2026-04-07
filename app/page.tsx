@@ -9,6 +9,8 @@ import { getAvailablePropertyIds, attachImages, buildAvailableCondition } from "
 import { db } from "@/lib/db";
 import { properties } from "@/lib/db/schema";
 
+export const dynamic = "force-dynamic";
+
 async function getHomePage() {
   return await client.fetch(`
     *[_type == "homePage"][0] {

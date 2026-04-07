@@ -5,6 +5,8 @@ import { eq, and, notInArray, sql, ilike, or } from "drizzle-orm";
 import { properties, propertyImages, rentalRequests } from "@/lib/db/schema";
 import { getAvailablePropertyIds, attachImages, buildAvailableCondition } from "@/lib/queries/properties";
 
+export const dynamic = "force-dynamic";
+
 const PER_PAGE = 20;
 
 
