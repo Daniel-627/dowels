@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 
 interface Props {
   userId: string;
@@ -21,7 +20,6 @@ const buttonLabels: Record<string, string> = {
 };
 
 export default function PromoteUserButton({ userId, currentRole }: Props) {
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
 
   if (currentRole === "ADMIN") {
@@ -40,10 +38,10 @@ export default function PromoteUserButton({ userId, currentRole }: Props) {
       body: JSON.stringify({ userId, role: target }),
     });
 
-    setLoading(false);
-
     if (res.ok) {
-      router.refresh();
+      window.location.reload();
+    } else {
+      setLoading(false);
     }
   }
 
