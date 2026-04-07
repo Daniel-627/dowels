@@ -2,10 +2,11 @@ import { client } from "@/sanity/lib/client";
 import { urlFor } from "@/sanity/lib/image";
 import { db } from "@/lib/db";
 import { properties, propertyImages } from "@/lib/db/schema";
-import { eq, and } from "drizzle-orm";
 import Image from "next/image";
 import Link from "next/link";
 import PropertyCard from "@/components/shared/PropertyCard";
+import { eq, and, notInArray, sql } from "drizzle-orm";
+import { rentalRequests } from "@/lib/db/schema";
 
 async function getHomePage() {
   return await client.fetch(`
@@ -18,14 +19,26 @@ async function getHomePage() {
   `);
 }
 
+
 async function getAvailableProperties() {
+  // Get property IDs that have any pending request
+  const pendingPropertyIds = await db
+    .selectDistinct({ propertyId: rentalRequests.propertyId })
+    .from(rentalRequests)
+    .where(eq(rentalRequests.status, "PENDING"));
+
+  const excludeIds = pendingPropertyIds.map((r) => r.propertyId);
+
   const props = await db
     .select()
     .from(properties)
     .where(
       and(
         eq(properties.isPublished, true),
-        eq(properties.status, "AVAILABLE")
+        eq(properties.status, "AVAILABLE"),
+        excludeIds.length > 0
+          ? notInArray(properties.id, excludeIds)
+          : sql`true`
       )
     )
     .limit(12);
