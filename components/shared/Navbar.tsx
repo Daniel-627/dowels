@@ -36,12 +36,14 @@ export default function Navbar() {
           className="flex items-center gap-2 shrink-0"
           onClick={() => setMenuOpen(false)}
         >
-          <span className="text-xl font-bold text-gray-900 tracking-tight">
-            Dowels
-          </span>
-          <span className="text-xs text-gray-400 font-normal hidden sm:block">
-            by Dorcas Owela
-          </span>
+          <div>
+            <span className="text-base sm:text-lg font-bold text-gray-900 tracking-tight leading-none block">
+              Dowels
+            </span>
+            <span className="text-xs text-gray-400 font-normal leading-none block">
+              Real Estate Management System
+            </span>
+          </div>
         </Link>
 
         {/* Desktop Nav */}

@@ -70,7 +70,7 @@ export default async function HomePage() {
           <div className="max-w-xl">
 
             <p className="text-xs sm:text-sm font-semibold text-white/60 uppercase tracking-widest mb-4">
-              Rental Management by OpenDoor
+              Rental Management by Dorcas Owela
             </p>
 
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight">

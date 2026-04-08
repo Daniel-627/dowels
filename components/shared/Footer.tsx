@@ -6,10 +6,11 @@ export default function Footer() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-8">
 
-          {/* Brand — full width on mobile */}
+          {/* Brand */}
           <div className="col-span-2 sm:col-span-1">
-            <p className="text-lg font-bold text-gray-900">Dowels</p>
-            <p className="text-sm text-gray-400 mt-1">by Dorcas Owela</p>
+            <p className="text-lg font-bold text-gray-900 leading-none">Dowels</p>
+            <p className="text-xs text-gray-400 mt-0.5">Real Estate Management System</p>
+            <p className="text-xs text-gray-400 mt-0.5">by Dorcas Owela</p>
             <p className="text-sm text-gray-500 mt-3 leading-relaxed max-w-xs">
               A smarter way to manage rentals — for landlords, tenants, and everyone in between.
             </p>
@@ -21,7 +22,7 @@ export default function Footer() {
             <div className="flex flex-col gap-2">
               {[
                 { label: "Home", href: "/" },
-                { label: "Properties", href: "/#properties" },
+                { label: "Properties", href: "/properties" },
                 { label: "About", href: "/about" },
                 { label: "Contact", href: "/contact" },
               ].map((link) => (
@@ -59,7 +60,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="mt-8 sm:mt-10 pt-5 sm:pt-6 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-2">
           <p className="text-xs text-gray-400">
-            © {new Date().getFullYear()} Dowels. All rights reserved.
+            © {new Date().getFullYear()} Dowels Real Estate Management System. All rights reserved.
           </p>
           <p className="text-xs text-gray-400">
             Built with Next.js & Neon
