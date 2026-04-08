@@ -8,13 +8,14 @@ export default function Footer() {
 
           {/* Brand */}
           <div className="col-span-2 sm:col-span-1">
-            <p className="text-lg font-bold text-gray-900 leading-none">Dowels</p>
-            <p className="text-xs text-gray-400 mt-0.5">Real Estate Management System</p>
-            <p className="text-xs text-gray-400 mt-0.5">by Dorcas Owela</p>
-            <p className="text-sm text-gray-500 mt-3 leading-relaxed max-w-xs">
-              A smarter way to manage rentals — for landlords, tenants, and everyone in between.
-            </p>
-          </div>
+  <p className="text-base font-bold text-gray-900 leading-snug">
+    Dowels Real Estate Management System
+  </p>
+  <p className="text-xs text-gray-400 mt-0.5">by Dorcas Owela</p>
+  <p className="text-sm text-gray-500 mt-3 leading-relaxed max-w-xs">
+    A smarter way to manage rentals — for landlords, tenants, and everyone in between.
+  </p>
+</div>
 
           {/* Navigate */}
           <div>
@@ -60,8 +61,8 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="mt-8 sm:mt-10 pt-5 sm:pt-6 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-2">
           <p className="text-xs text-gray-400">
-            © {new Date().getFullYear()} Dowels Real Estate Management System. All rights reserved.
-          </p>
+  © {new Date().getFullYear()} Dowels Real Estate Management System. All rights reserved.
+</p>
           <p className="text-xs text-gray-400">
             Built with Next.js & Neon
           </p>
